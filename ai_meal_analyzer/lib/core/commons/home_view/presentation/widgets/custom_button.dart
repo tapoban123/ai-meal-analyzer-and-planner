@@ -1,4 +1,4 @@
-import 'package:ai_meal_analyzer/core/utils/contants.dart';
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

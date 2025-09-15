@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/widgets/custom_button.dart';
-import 'package:ai_meal_analyzer/core/utils/contants.dart';
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_events.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_state.dart';

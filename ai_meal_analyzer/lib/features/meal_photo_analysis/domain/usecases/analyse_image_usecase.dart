@@ -1,3 +1,4 @@
+import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/domain/repositories/gemini_ai_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -7,7 +8,7 @@ class AnalyseImageUsecase {
   AnalyseImageUsecase({required GeminiAiRepository geminiAiRepository})
     : _geminiAiRepository = geminiAiRepository;
 
-  Future<String?> call({required XFile image}) async {
+  Future<MealDetailsModel?> call({required XFile image}) async {
     return await _geminiAiRepository.analyseImage(image: image);
   }
 }

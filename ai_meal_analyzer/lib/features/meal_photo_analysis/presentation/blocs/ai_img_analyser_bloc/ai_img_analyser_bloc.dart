@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ai_meal_analyzer/core/utils/contants.dart';
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/domain/usecases/analyse_image_usecase.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_events.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_state.dart';
@@ -29,11 +29,11 @@ class AiImgAnalyserBloc extends Bloc<AiImgAnalyserEvents, AiImgAnalyserState> {
       final analysisResult = await _analyseImageUsecase.call(
         image: state.image!,
       );
-      log(analysisResult ?? "No Result");
+      log(analysisResult.toString() ?? "No Result");
       emit(
         state.copyWith(
           status: AIImgAnalyserStatus.success,
-          mealDetails: analysisResult,
+          mealDetails: analysisResult.toString(),
         ),
       );
     }
