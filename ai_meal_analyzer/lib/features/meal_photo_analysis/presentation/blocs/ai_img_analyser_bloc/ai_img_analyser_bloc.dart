@@ -29,11 +29,11 @@ class AiImgAnalyserBloc extends Bloc<AiImgAnalyserEvents, AiImgAnalyserState> {
       final analysisResult = await _analyseImageUsecase.call(
         image: state.image!,
       );
-      log(analysisResult.toString() ?? "No Result");
+
       emit(
         state.copyWith(
           status: AIImgAnalyserStatus.success,
-          mealDetails: analysisResult.toString(),
+          mealDetails: analysisResult,
         ),
       );
     }

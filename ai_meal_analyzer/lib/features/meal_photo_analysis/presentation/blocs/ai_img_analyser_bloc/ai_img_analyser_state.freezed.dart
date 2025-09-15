@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AiImgAnalyserState {
 
- AIImgAnalyserStatus get status; XFile? get image; String? get mealDetails; String? get error;
+ AIImgAnalyserStatus get status; XFile? get image; MealDetailsModel? get mealDetails; String? get error;
 /// Create a copy of AiImgAnalyserState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,11 +45,11 @@ abstract mixin class $AiImgAnalyserStateCopyWith<$Res>  {
   factory $AiImgAnalyserStateCopyWith(AiImgAnalyserState value, $Res Function(AiImgAnalyserState) _then) = _$AiImgAnalyserStateCopyWithImpl;
 @useResult
 $Res call({
- AIImgAnalyserStatus status, XFile? image, String? mealDetails, String? error
+ AIImgAnalyserStatus status, XFile? image, MealDetailsModel? mealDetails, String? error
 });
 
 
-
+$MealDetailsModelCopyWith<$Res>? get mealDetails;
 
 }
 /// @nodoc
@@ -67,11 +67,23 @@ class _$AiImgAnalyserStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AIImgAnalyserStatus,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as XFile?,mealDetails: freezed == mealDetails ? _self.mealDetails : mealDetails // ignore: cast_nullable_to_non_nullable
-as String?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as MealDetailsModel?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
+/// Create a copy of AiImgAnalyserState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MealDetailsModelCopyWith<$Res>? get mealDetails {
+    if (_self.mealDetails == null) {
+    return null;
+  }
 
+  return $MealDetailsModelCopyWith<$Res>(_self.mealDetails!, (value) {
+    return _then(_self.copyWith(mealDetails: value));
+  });
+}
 }
 
 
@@ -153,7 +165,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AIImgAnalyserStatus status,  XFile? image,  String? mealDetails,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AIImgAnalyserStatus status,  XFile? image,  MealDetailsModel? mealDetails,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AiImgAnalyserState() when $default != null:
 return $default(_that.status,_that.image,_that.mealDetails,_that.error);case _:
@@ -174,7 +186,7 @@ return $default(_that.status,_that.image,_that.mealDetails,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AIImgAnalyserStatus status,  XFile? image,  String? mealDetails,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AIImgAnalyserStatus status,  XFile? image,  MealDetailsModel? mealDetails,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _AiImgAnalyserState():
 return $default(_that.status,_that.image,_that.mealDetails,_that.error);case _:
@@ -194,7 +206,7 @@ return $default(_that.status,_that.image,_that.mealDetails,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AIImgAnalyserStatus status,  XFile? image,  String? mealDetails,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AIImgAnalyserStatus status,  XFile? image,  MealDetailsModel? mealDetails,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _AiImgAnalyserState() when $default != null:
 return $default(_that.status,_that.image,_that.mealDetails,_that.error);case _:
@@ -214,7 +226,7 @@ class _AiImgAnalyserState implements AiImgAnalyserState {
 
 @override@JsonKey() final  AIImgAnalyserStatus status;
 @override final  XFile? image;
-@override final  String? mealDetails;
+@override final  MealDetailsModel? mealDetails;
 @override final  String? error;
 
 /// Create a copy of AiImgAnalyserState
@@ -247,11 +259,11 @@ abstract mixin class _$AiImgAnalyserStateCopyWith<$Res> implements $AiImgAnalyse
   factory _$AiImgAnalyserStateCopyWith(_AiImgAnalyserState value, $Res Function(_AiImgAnalyserState) _then) = __$AiImgAnalyserStateCopyWithImpl;
 @override @useResult
 $Res call({
- AIImgAnalyserStatus status, XFile? image, String? mealDetails, String? error
+ AIImgAnalyserStatus status, XFile? image, MealDetailsModel? mealDetails, String? error
 });
 
 
-
+@override $MealDetailsModelCopyWith<$Res>? get mealDetails;
 
 }
 /// @nodoc
@@ -269,12 +281,24 @@ class __$AiImgAnalyserStateCopyWithImpl<$Res>
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as AIImgAnalyserStatus,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
 as XFile?,mealDetails: freezed == mealDetails ? _self.mealDetails : mealDetails // ignore: cast_nullable_to_non_nullable
-as String?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as MealDetailsModel?,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
 
+/// Create a copy of AiImgAnalyserState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MealDetailsModelCopyWith<$Res>? get mealDetails {
+    if (_self.mealDetails == null) {
+    return null;
+  }
 
+  return $MealDetailsModelCopyWith<$Res>(_self.mealDetails!, (value) {
+    return _then(_self.copyWith(mealDetails: value));
+  });
+}
 }
 
 // dart format on

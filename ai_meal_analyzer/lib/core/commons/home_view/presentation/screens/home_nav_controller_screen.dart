@@ -42,16 +42,22 @@ class _HomeBottomNavBar extends StatelessWidget {
       Icons.analytics_rounded,
     ];
 
-    return Container(
-      height: 90.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 20),
-        ],
-      ),
-      child: SafeArea(
+    return SafeArea(
+      bottom: true,
+      child: Container(
+        height: 70.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              spreadRadius: 0,
+              blurRadius: 20,
+              offset: Offset(0, -15),
+            ),
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(icons.length, (index) {
