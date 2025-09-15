@@ -8,7 +8,8 @@ final String GEMINI_API_KEY = dotenv.get("GEMINI_API_KEY");
 Future<XFile?> pickImage() async {
   final ImagePicker picker = ImagePicker();
 
-  final XFile? file = await picker.pickImage(source: ImageSource.camera);
+  // final XFile? file = await picker.pickImage(source: ImageSource.camera);
+  final XFile? file = await picker.pickImage(source: ImageSource.gallery);
   return file;
 }
 

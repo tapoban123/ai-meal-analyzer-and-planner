@@ -7,5 +7,5 @@
 - `flutter_bloc`
 - `sqflite`
 - `fl_chart`
-- `flutter_screen_util`
+- `flutter_screenutil`
 - `flutter_dotenv` 

@@ -1,5 +1,6 @@
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class GeminiAiDatasource {
-  Future<String?> analysePhoto(XFile image);
+  Future<Response> analysePhoto(XFile image);
 }

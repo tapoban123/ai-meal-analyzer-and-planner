@@ -8,6 +8,7 @@ import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MealPhotoAnalysisScreen extends StatefulWidget {
@@ -40,7 +41,19 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0.w),
-        child: BlocBuilder<AiImgAnalyserBloc, AiImgAnalyserState>(
+        child: BlocConsumer<AiImgAnalyserBloc, AiImgAnalyserState>(
+          listener: (context, state) {
+            if (state.status == AIImgAnalyserStatus.loading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) =>
+                    Center(child: CircularProgressIndicator()),
+              );
+            }else if (state.status == AIImgAnalyserStatus.success){
+              context.pop();
+            }
+          },
           builder: (context, state) {
             if (state.image != null) {
               return Center(
@@ -59,7 +72,11 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
                       ),
                     ),
                     CustomButton(
-                      onTap: () {},
+                      onTap: () {
+                        context.read<AiImgAnalyserBloc>().add(
+                          AnalyseImageEvent(),
+                        );
+                      },
                       bgColor: Colors.indigo,
                       buttonText: "Analyse",
                     ),
@@ -67,7 +84,13 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
                 ),
               );
             }
-            return SizedBox.shrink();
+            return Center(
+              child: Text(
+                "No Image selected.",
+                style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            );
           },
         ),
       ),
