@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/datasources/gemini_ai_datasource.dart';
@@ -10,15 +9,10 @@ class GeminiAiDatasourceImpl extends GeminiAiDatasource {
   @override
   Future<http.Response> analysePhoto(XFile image) async {
     String base64Image = base64Encode(await image.readAsBytes());
-    final Uri url = Uri.parse(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
-    );
+    final Uri url = GeminiCredentials.GEMINI_GENERATE_CONTENT_URL;
     final response = await http.post(
       url,
-      headers: {
-        "x-goog-api-key": GEMINI_API_KEY,
-        "Content-Type": "application/json",
-      },
+      headers: GeminiCredentials.HEADERS,
       body: jsonEncode({
         "contents": [
           {

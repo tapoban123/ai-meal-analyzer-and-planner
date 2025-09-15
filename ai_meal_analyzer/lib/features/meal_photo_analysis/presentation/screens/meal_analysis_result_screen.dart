@@ -80,6 +80,7 @@ class MealAnalysisResultScreen extends StatelessWidget {
                         padding: EdgeInsets.only(left: 12.0.w),
                         child: ListView.builder(
                           itemCount: mealDetails.ingredientsList.length,
+                          padding: EdgeInsets.only(bottom: 8.h),
                           itemBuilder: (context, index) {
                             return Row(
                               spacing: 6.w,
