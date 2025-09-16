@@ -49,12 +49,7 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
         child: BlocConsumer<AiImgAnalyserBloc, AiImgAnalyserState>(
           listener: (context, state) {
             if (state.status == AIImgAnalyserStatus.loading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) =>
-                    Center(child: CircularProgressIndicator()),
-              );
+              showProgressLoaderDialog(context);
             } else if (state.status == AIImgAnalyserStatus.success) {
               context.pop();
               context.push(RoutePaths.analysisResult);

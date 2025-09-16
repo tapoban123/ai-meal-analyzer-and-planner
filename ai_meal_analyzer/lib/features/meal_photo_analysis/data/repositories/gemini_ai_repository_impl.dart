@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/datasources/gemini_ai_datasource.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/domain/repositories/gemini_ai_repository.dart';
@@ -27,11 +28,7 @@ class GeminiAiRepositoryImpl extends GeminiAiRepository {
           ).toString(),
         );
         return MealDetailsModel.fromJson(
-          jsonDecode(
-            jsonDecode(
-              response.body,
-            )["candidates"][0]["content"]["parts"][0]["text"],
-          ),
+          geminiResponseFormatter(response.body),
         );
       }
       throw Exception(response.body);

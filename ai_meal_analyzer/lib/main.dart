@@ -1,5 +1,6 @@
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/blocs/bottom_nav_controller_cubit.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_bloc.dart';
+import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_bloc.dart';
 import 'package:ai_meal_analyzer/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_meal_analyzer/routes.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => BottomNavControllerCubit()),
           BlocProvider(create: (context) => getIt<AiImgAnalyserBloc>()),
+          BlocProvider(create: (context) => getIt<MealPlanGenerationBloc>()),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,

@@ -6,7 +6,13 @@ import 'package:http/http.dart' as http;
 
 class AiMealPlannerDatasourceImpl extends AiMealPlannerDatasource {
   @override
-  Future<http.Response> generateMealPlan() async {
+  Future<http.Response> generateMealPlan({
+    required String preferences,
+    required String restrictions,
+    required double calories,
+    required String macroGoals,
+    required String mealType,
+  }) async {
     final response = await http.post(
       GeminiCredentials.GEMINI_GENERATE_CONTENT_URL,
       headers: GeminiCredentials.HEADERS,
@@ -14,7 +20,15 @@ class AiMealPlannerDatasourceImpl extends AiMealPlannerDatasource {
         "contents": [
           {
             "parts": [
-              {"text": ""},
+              {
+                "text": MEAL_PLAN_GENERATE_PROMPT(
+                  preferences: preferences,
+                  restrictions: restrictions,
+                  calories: calories,
+                  macroGoals: macroGoals,
+                  mealType: mealType,
+                ),
+              },
             ],
           },
         ],
