@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GeminiCredentials {
@@ -40,6 +42,47 @@ void showProgressLoaderDialog(BuildContext context) {
     barrierDismissible: false,
     builder: (context) =>
         Center(child: CircularProgressIndicator(color: Colors.white)),
+  );
+}
+
+void showMsgDialog(
+  BuildContext context, {
+  required String heading,
+  required String message,
+  required VoidCallback onTap,
+  String? buttonText,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      child: Padding(
+        padding:  EdgeInsets.all(20.0.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12.h,
+          children: [
+            Text(
+              heading,
+              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              message,
+              style: TextStyle(fontSize: 16.sp),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              onPressed: onTap,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
+              child: Text(
+                buttonText ?? "Retry",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
 
@@ -84,7 +127,8 @@ String MEAL_PLAN_GENERATE_PROMPT({
   required double calories,
   required String macroGoals,
   required String mealType,
-}) => """
+}) =>
+    """
 You are a professional nutritionist AI. Your task is to generate a daily meal plan based on the user’s inputs. The user will provide:
 1. Dietary preferences (e.g., vegetarian, vegan, keto, etc.)
 2. Restrictions (e.g., no peanuts, no dairy, gluten-free, etc.)
@@ -122,7 +166,7 @@ Output strictly in the following Dart structure:
       "ingredients": ["Chicken Breast", "Lettuce", "Tomatoes", "Olive Oil"],
       "calories": 500.0,
       "macros": {
-        "protein": 40.0,
+        "proteins": 40.0,
         "carbs": 20.0,
         "fats": 20.0
       }
@@ -137,9 +181,8 @@ Output strictly in the following Dart structure:
   }
 }
 
-DO NOT USE JSON  MARKDOWN FORMATTING.
-
 ⚠️ Important:
+- Generate the data in strict Dart Map<String, Object> format only (no markdown, no explanation). The structure must be compatible with Dart's fromJson parsing. DO NOT USE JSON  MARKDOWN FORMATTING.
 - Return the output in valid JSON/Dart Map format only (no extra text or explanation).
 - Do not omit totalDailyNutrition fields; include all available nutrients from the meals.
 - Round numeric values to 2 decimal place.

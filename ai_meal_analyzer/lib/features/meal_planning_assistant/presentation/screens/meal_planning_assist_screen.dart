@@ -39,6 +39,23 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
   );
   MealTypes mealType = MealTypes.ALL;
 
+  void generateMealPlans({bool retrying = false}) {
+    if (retrying) {
+      context.pop();
+    }
+    final mealDetails = UserMealDetails(
+      preferences: preferencesController.text.trim(),
+      restrictions: restrictionsController.text.trim(),
+      macroGoals: macroGoalsController.text.trim(),
+      calories: double.parse(caloriesController.text.trim()),
+      mealType: mealTypeController.text.trim(),
+    );
+
+    context.read<MealPlanGenerationBloc>().add(
+      GenerateMealPlanEvent(mealDetails: mealDetails),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +68,16 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
               showProgressLoaderDialog(context);
             } else if (state.status == MealPlanGeneratorStatus.success) {
               Navigator.pop(context);
-              context.push(RoutePaths.viewMealPlans);
+              if (state.mealPlanWithDailyNutrition == null) {
+                showMsgDialog(
+                  context,
+                  heading: "An error occurred",
+                  message: "An error has occurred. Please try again.",
+                  onTap: () => generateMealPlans(retrying: true),
+                );
+              } else {
+                context.push(RoutePaths.viewMealPlans);
+              }
             }
           },
           child: Column(
@@ -118,21 +144,21 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
               ),
               30.verticalSpace,
               CustomButton(
-                onTap: () {
-                  final mealDetails = UserMealDetails(
-                    preferences: preferencesController.text.trim(),
-                    restrictions: restrictionsController.text.trim(),
-                    macroGoals: macroGoalsController.text.trim(),
-                    calories: double.parse(caloriesController.text.trim()),
-                    mealType: mealTypeController.text.trim(),
-                  );
-
-                  context.read<MealPlanGenerationBloc>().add(
-                    GenerateMealPlanEvent(mealDetails: mealDetails),
-                  );
-                },
+                onTap: generateMealPlans,
                 bgColor: Colors.teal,
                 buttonText: "Generate Meal Plans",
+              ),
+              CustomButton(
+                onTap: () {
+                  showMsgDialog(
+                    context,
+                    heading: "An error occurred",
+                    message: "An error has occurred. Please try again.",
+                    onTap: generateMealPlans,
+                  );
+                },
+                bgColor: Colors.indigo,
+                buttonText: "View Meal Plans",
               ),
             ],
           ),

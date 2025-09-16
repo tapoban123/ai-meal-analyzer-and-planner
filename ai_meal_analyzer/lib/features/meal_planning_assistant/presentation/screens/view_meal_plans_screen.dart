@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:ai_meal_analyzer/core/utils/theme.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_states.dart';
+import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/widgets/chart_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,13 +29,29 @@ class ViewMealPlansScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 300.h,
+                        child:
+                        PieChart(
+                          PieChartData(
+                            sectionsSpace: 3,
+                            sections: List.generate(
+                              nutritions.length,
+                              (index) => PieChartSectionData(
+                                value: nutritions.values.toList()[index],
+                                radius: 40,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       Column(
                         children: List.generate(meals.length, (index) {
                           final eachMeal = meals[index];
                           log(eachMeal.toString());
 
                           return Padding(
-                            padding: EdgeInsets.only(bottom: 20.h),
+                            padding: EdgeInsets.only(bottom: 00.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -48,10 +66,35 @@ class ViewMealPlansScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  "Calories: ${eachMeal.calories} kcal",
-                                  style: TextStyle(fontSize: 20.sp),
+                                Card(
+                                  color: Colors.lightGreenAccent,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w,
+                                      vertical: 10.w,
+                                    ),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "${eachMeal.calories} kcal ",
+                                        style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: "Calories",
+                                            style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
+                                10.verticalSpace,
                                 Text(
                                   "Ingredients:",
                                   style: TextStyle(
@@ -76,24 +119,81 @@ class ViewMealPlansScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 200.h,
-                                  child: PieChart(
-                                    PieChartData(
-                                      sectionsSpace: 4,
-                                      sections: List.generate(
-                                        eachMeal.macros.values.length,
-                                        (index) => PieChartSectionData(
-                                          value: eachMeal.macros.values
-                                              .toList()[index],
-                                          title: eachMeal.macros.keys
-                                              .toList()[index],
-                                          showTitle: true,
-                                          radius: 50,
+                                14.verticalSpace,
+                                Stack(
+                                  children: [
+                                    Positioned(
+                                      bottom: 0,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        spacing: 10.w,
+                                        children: [
+                                          ChartIndicator(
+                                            color: CustomColors.fatsColor,
+                                            text: "Fats",
+                                          ),
+                                          ChartIndicator(
+                                            color: CustomColors.proteinsColor,
+                                            text: "Proteins",
+                                          ),
+                                          ChartIndicator(
+                                            color: CustomColors.carbsColor,
+                                            text: "Carbs",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 200.h,
+                                      child: PieChart(
+                                        PieChartData(
+                                          sectionsSpace: 4,
+                                          sections: List.generate(
+                                            eachMeal.macros.values.length,
+                                            (index) {
+                                              final macro = eachMeal.macros.keys
+                                                  .toList()[index];
+                                              Color? color;
+
+                                              switch (macro) {
+                                                case "fats":
+                                                  color =
+                                                      CustomColors.fatsColor;
+                                                  break;
+                                                case "carbs":
+                                                  color =
+                                                      CustomColors.carbsColor;
+                                                  break;
+                                                case "protein":
+                                                  color = CustomColors
+                                                      .proteinsColor;
+                                                  break;
+                                              }
+                                              return PieChartSectionData(
+                                                badgePositionPercentageOffset:
+                                                    -2,
+                                                value: eachMeal.macros.values
+                                                    .toList()[index],
+                                                title:
+                                                    "${eachMeal.macros.values.toList()[index]} g",
+                                                showTitle: true,
+                                                radius: 50,
+                                                color: color,
+                                                titleStyle: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10.w),
+                                  child: Divider(),
                                 ),
                               ],
                             ),
