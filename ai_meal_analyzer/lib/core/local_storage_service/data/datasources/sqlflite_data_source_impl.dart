@@ -34,8 +34,9 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
       ingredientsList TEXT
       ) 
       """);
-        db.execute("""
+        return db.execute("""
       CREATE TABLE ${TableNames.mealPlansTable} (
+      mealId TEXT,
       id TEXT PRIMARY KEY,
       type TEXT,
       name TEXT,
@@ -46,6 +47,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
       ) 
       """);
       },
+      version: 1,
     );
   }
 
@@ -62,16 +64,20 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
   }
 
   @override
-  Future<void> retrieveSpecificFromTable({
+  Future<List<Map<String, Object?>>> retrieveSpecificFromTable({
     required String tableName,
     required String id,
   }) async {
     final result = await db.query(tableName, where: "id = ?", whereArgs: [id]);
+    return result;
   }
 
   @override
-  Future<void> retrieveAllFromTable({required String tableName}) async {
+  Future<List<Map<String, Object?>>> retrieveAllFromTable({
+    required String tableName,
+  }) async {
     final results = await db.query(tableName);
+    return results;
   }
 
   @override

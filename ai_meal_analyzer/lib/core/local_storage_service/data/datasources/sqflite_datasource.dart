@@ -6,9 +6,9 @@ abstract class SqfliteDatasource {
     required Map<String, Object?> json,
   });
 
-  Future<void> retrieveAllFromTable({required String tableName});
+  Future<List<Map<String, Object?>>> retrieveAllFromTable({required String tableName});
 
-  Future<void> retrieveSpecificFromTable({
+  Future<List<Map<String, Object?>>> retrieveSpecificFromTable({
     required String tableName,
     required String id,
   });

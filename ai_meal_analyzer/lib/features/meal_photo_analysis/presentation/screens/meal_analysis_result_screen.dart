@@ -79,7 +79,7 @@ class MealAnalysisResultScreen extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(left: 12.0.w),
                         child: ListView.builder(
-                          itemCount: mealDetails.ingredientsList.length,
+                          itemCount: mealDetails.ingredientsList!.length,
                           padding: EdgeInsets.only(bottom: 8.h),
                           itemBuilder: (context, index) {
                             return Row(
@@ -87,7 +87,7 @@ class MealAnalysisResultScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.circle, size: 8.w),
-                                Text(mealDetails.ingredientsList[index]),
+                                Text(mealDetails.ingredientsList![index]),
                               ],
                             );
                           },

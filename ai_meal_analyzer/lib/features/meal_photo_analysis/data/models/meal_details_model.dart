@@ -17,7 +17,7 @@ abstract class MealDetailsModel with _$MealDetailsModel {
     required double fat,
     required double fiber,
     required double otherNutrients,
-    required List<String> ingredientsList,
+    List<String>? ingredientsList,
   }) = _MealDetailsModel;
 
   factory MealDetailsModel.fromJson(Map<String, Object?> json) =>

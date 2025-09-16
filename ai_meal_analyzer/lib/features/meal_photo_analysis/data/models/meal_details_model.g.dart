@@ -17,8 +17,8 @@ _MealDetailsModel _$MealDetailsModelFromJson(Map<String, dynamic> json) =>
       fat: (json['fat'] as num).toDouble(),
       fiber: (json['fiber'] as num).toDouble(),
       otherNutrients: (json['otherNutrients'] as num).toDouble(),
-      ingredientsList: (json['ingredientsList'] as List<dynamic>)
-          .map((e) => e as String)
+      ingredientsList: (json['ingredientsList'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
     );
 

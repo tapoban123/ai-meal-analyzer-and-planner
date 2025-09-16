@@ -1,4 +1,6 @@
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/blocs/bottom_nav_controller_cubit.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/data/datasources/sqflite_datasource.dart';
+import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_bloc.dart';
 import 'package:ai_meal_analyzer/injection.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   initServices();
   await dotenv.load(fileName: ".env");
+  await getIt<SqfliteDatasource>().createDBAndTables();
 
   runApp(const MyApp());
 }
@@ -28,6 +31,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => BottomNavControllerCubit()),
           BlocProvider(create: (context) => getIt<AiImgAnalyserBloc>()),
           BlocProvider(create: (context) => getIt<MealPlanGenerationBloc>()),
+          BlocProvider(create: (context) => getIt<HistoryAndAnalyticsBloc>()),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
