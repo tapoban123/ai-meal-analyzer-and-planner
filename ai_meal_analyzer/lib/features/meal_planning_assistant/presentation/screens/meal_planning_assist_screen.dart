@@ -5,9 +5,11 @@ import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/b
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_events.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_states.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/widgets/custom_text_field.dart';
+import 'package:ai_meal_analyzer/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 enum MealTypes { ALL, BREAKFAST, LUNCH, DINNER, SNACKS }
 
@@ -49,6 +51,7 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
               showProgressLoaderDialog(context);
             } else if (state.status == MealPlanGeneratorStatus.success) {
               Navigator.pop(context);
+              context.push(RoutePaths.viewMealPlans);
             }
           },
           child: Column(
