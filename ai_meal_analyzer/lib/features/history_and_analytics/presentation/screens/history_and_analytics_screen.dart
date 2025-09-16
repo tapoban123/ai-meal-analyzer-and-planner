@@ -1,9 +1,11 @@
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_states.dart';
+import 'package:ai_meal_analyzer/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class HistoryAndAnalyticsScreen extends StatefulWidget {
   const HistoryAndAnalyticsScreen({super.key});
@@ -51,13 +53,29 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: state.mealAnalysisData != null && state.mealAnalysisData!.isNotEmpty
+                  child:
+                      state.mealAnalysisData != null &&
+                          state.mealAnalysisData!.isNotEmpty
                       ? ListView.builder(
                           itemCount: state.mealAnalysisData!.length,
                           itemBuilder: (context, index) {
                             final mealData = state.mealAnalysisData![index];
 
-                            return ListTile(title: Text(mealData.mealName));
+                            return Card(
+                              child: ListTile(
+                                title: Text(mealData.mealName),
+                                subtitle: Text(
+                                  mealData.description,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                onTap: () {
+                                  context.push(
+                                    RoutePaths.analysisResultHistory,
+                                    extra: mealData,
+                                  );
+                                },
+                              ),
+                            );
                           },
                         )
                       : Center(child: Text("No history")),
