@@ -17,7 +17,7 @@ class AiImgAnalyserBloc extends Bloc<AiImgAnalyserEvents, AiImgAnalyserState> {
   }
 
   void _captureImage(CaptureImageEvent event, Emitter emit) async {
-    final image = await pickImage();
+    final image = await pickImage(imgSource: event.imgSource);
     if (image != null) {
       emit(state.copyWith(image: image));
     }

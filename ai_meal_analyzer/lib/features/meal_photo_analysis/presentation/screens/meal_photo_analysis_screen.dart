@@ -10,25 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
-class MealPhotoAnalysisScreen extends StatefulWidget {
+class MealPhotoAnalysisScreen extends StatelessWidget {
   const MealPhotoAnalysisScreen({super.key});
-
-  @override
-  State<MealPhotoAnalysisScreen> createState() =>
-      _MealPhotoAnalysisScreenState();
-}
-
-class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +23,18 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
           context.watch<AiImgAnalyserBloc>().state.image != null
           ? FloatingActionButton(
               onPressed: () {
-                context.read<AiImgAnalyserBloc>().add(CaptureImageEvent());
+                showBottomSheet(
+                  context: context,
+                  builder: (context) => TapRegion(
+                    onTapUpOutside: (event) {
+                      context.pop();
+                    },
+                    child: SizedBox(
+                      height: 100,
+                      child: _ChooseImgSourceWidget(size: 40.w),
+                    ),
+                  ),
+                );
               },
               backgroundColor: Colors.deepOrange,
               child: Icon(Icons.camera_alt_rounded, color: Colors.white),
@@ -96,34 +92,78 @@ class _MealPhotoAnalysisScreenState extends State<MealPhotoAnalysisScreen> {
                 ),
               );
             }
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 20.h,
-                children: [
-                  Text(
-                    "No Image selected.",
-                    style: TextStyle(
-                      fontSize: 35.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  CustomButton(
-                    onTap: () {
-                      context.read<AiImgAnalyserBloc>().add(
-                        CaptureImageEvent(),
-                      );
-                    },
-                    bgColor: Colors.purpleAccent,
-                    buttonText: "Upload Image",
-                  ),
-                ],
-              ),
-            );
+            return Center(child: _ChooseImgSourceWidget(size: 100.w));
+            // return Center(
+            //   child: Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     spacing: 20.h,
+            //     children: [
+            //       Text(
+            //         "No Image selected.",
+            //         style: TextStyle(
+            //           fontSize: 35.sp,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //         textAlign: TextAlign.center,
+            //       ),
+            //       CustomButton(
+            //         onTap: () {
+            //           context.read<AiImgAnalyserBloc>().add(
+            //             CaptureImageEvent(),
+            //           );
+            //         },
+            //         bgColor: Colors.purpleAccent,
+            //         buttonText: "Upload Image",
+            //       ),
+            //     ],
+            //   ),
+            // );
           },
         ),
       ),
+    );
+  }
+}
+
+class _ChooseImgSourceWidget extends StatelessWidget {
+  final double size;
+
+  const _ChooseImgSourceWidget({super.key, required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          onPressed: () {
+            context.read<AiImgAnalyserBloc>().add(
+              CaptureImageEvent(imgSource: ImageSource.gallery),
+            );
+          },
+          style: IconButton.styleFrom(
+            minimumSize: Size(size.w + 50, size.w + 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+          ),
+          icon: Icon(Icons.upload_rounded, size: size.w),
+        ),
+        IconButton(
+          onPressed: () {
+            context.read<AiImgAnalyserBloc>().add(
+              CaptureImageEvent(imgSource: ImageSource.camera),
+            );
+          },
+          style: IconButton.styleFrom(
+            minimumSize: Size(size.w + 50, size.w + 50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+          ),
+          icon: Icon(Icons.camera_alt_rounded, size: size.w),
+        ),
+      ],
     );
   }
 }

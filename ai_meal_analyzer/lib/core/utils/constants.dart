@@ -20,11 +20,11 @@ class GeminiCredentials {
   };
 }
 
-Future<XFile?> pickImage() async {
+Future<XFile?> pickImage({required ImageSource imgSource}) async {
   final ImagePicker picker = ImagePicker();
 
   // final XFile? file = await picker.pickImage(source: ImageSource.camera);
-  final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+  final XFile? file = await picker.pickImage(source: imgSource);
   return file;
 }
 
