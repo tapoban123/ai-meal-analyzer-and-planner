@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/core/utils/theme.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_states.dart';
@@ -22,6 +23,7 @@ class ViewMealPlansScreen extends StatelessWidget {
             final meals = state.mealPlanWithDailyNutrition!.mealPlans;
             final nutritions =
                 state.mealPlanWithDailyNutrition!.totalDailyNutrition;
+            pieChartColors.shuffle();
 
             return SafeArea(
               child: Padding(
@@ -30,25 +32,59 @@ class ViewMealPlansScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 300.h,
-                        child:
-                        PieChart(
-                          PieChartData(
-                            sectionsSpace: 3,
-                            sections: List.generate(
-                              nutritions.length,
-                              (index) => PieChartSectionData(
-                                value: nutritions.values.toList()[index],
-                                radius: 40,
+                        height: 520.h,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              bottom: 0,
+                              child: SizedBox(
+                                width: getScreenWidth(context),
+                                height: 140.h,
+                                child: Wrap(
+                                  spacing: 20.w,
+                                  runSpacing: 6.w,
+                                  children: List.generate(
+                                    nutritions.length,
+                                    (index) => ChartIndicator(
+                                      color: pieChartColors[index],
+                                      text: nutritions.keys.toList()[index],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 350.h,
+                              child: PieChart(
+                                PieChartData(
+                                  sectionsSpace: 3,
+                                  sections: List.generate(
+                                    nutritions.length,
+                                    (index) => PieChartSectionData(
+                                      value: nutritions.values.toList()[index],
+                                      radius: 100,
+                                      color: pieChartColors[index],
+                                      titleStyle: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 10.h,
+                        ),
+                        child: Divider(),
                       ),
                       Column(
                         children: List.generate(meals.length, (index) {
                           final eachMeal = meals[index];
-                          log(eachMeal.toString());
 
                           return Padding(
                             padding: EdgeInsets.only(bottom: 00.h),

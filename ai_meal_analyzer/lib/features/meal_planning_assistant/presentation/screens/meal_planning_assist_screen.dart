@@ -62,7 +62,7 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
       appBar: AppBar(title: Text("Meal Planner Assistant"), centerTitle: true),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w),
-        child: BlocListener<MealPlanGenerationBloc, MealPlanGenerationStates>(
+        child: BlocConsumer<MealPlanGenerationBloc, MealPlanGenerationStates>(
           listener: (context, state) {
             if (state.status == MealPlanGeneratorStatus.loading) {
               showProgressLoaderDialog(context);
@@ -80,88 +80,89 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
               }
             }
           },
-          child: Column(
-            spacing: 10.h,
-            children: [
-              CustomTextField(
-                textController: preferencesController,
-                keyboardType: TextInputType.text,
-                hintText: "Dietary Preferences",
-                maxLines: 2,
-              ),
-              CustomTextField(
-                textController: restrictionsController,
-                keyboardType: TextInputType.text,
-                hintText: "Restrictions",
-                maxLines: 2,
-              ),
-              CustomTextField(
-                textController: caloriesController,
-                keyboardType: TextInputType.number,
-                hintText: "Calories",
-                maxLines: 1,
-              ),
-              CustomTextField(
-                textController: macroGoalsController,
-                keyboardType: TextInputType.text,
-                hintText: "Macro Goals",
-                maxLines: 2,
-              ),
-              DropdownMenu(
-                width: double.infinity,
-                initialSelection: "All",
-                controller: mealTypeController,
-                menuStyle: MenuStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.white),
-                  fixedSize: WidgetStatePropertyAll(
-                    Size(getScreenWidth(context), 260.h),
+          builder: (context, state) {
+            return Column(
+              spacing: 10.h,
+              children: [
+                CustomTextField(
+                  textController: preferencesController,
+                  keyboardType: TextInputType.text,
+                  hintText: "Dietary Preferences",
+                  maxLines: 2,
+                ),
+                CustomTextField(
+                  textController: restrictionsController,
+                  keyboardType: TextInputType.text,
+                  hintText: "Restrictions",
+                  maxLines: 2,
+                ),
+                CustomTextField(
+                  textController: caloriesController,
+                  keyboardType: TextInputType.number,
+                  hintText: "Calories",
+                  maxLines: 1,
+                ),
+                CustomTextField(
+                  textController: macroGoalsController,
+                  keyboardType: TextInputType.text,
+                  hintText: "Macro Goals",
+                  maxLines: 2,
+                ),
+                DropdownMenu(
+                  width: double.infinity,
+                  initialSelection: "All",
+                  controller: mealTypeController,
+                  menuStyle: MenuStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                    fixedSize: WidgetStatePropertyAll(
+                      Size(getScreenWidth(context), 260.h),
+                    ),
+                  ),
+                  onSelected: (type) {
+                    switch (type) {
+                      case "All":
+                        mealType = MealTypes.ALL;
+                        break;
+                    }
+                  },
+                  inputDecorationTheme: InputDecorationTheme(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(color: Color(0xFFD3D3D3)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(width: 2),
+                    ),
+                  ),
+                  dropdownMenuEntries: List.generate(
+                    MealTypes.values.length,
+                    (index) => DropdownMenuEntry(
+                      value: MealTypes.values[index].name,
+                      label: MealTypes.values[index].name,
+                    ),
                   ),
                 ),
-                onSelected: (type) {
-                  switch (type) {
-                    case "All":
-                      mealType = MealTypes.ALL;
-                      break;
-                  }
-                },
-                inputDecorationTheme: InputDecorationTheme(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                    borderSide: BorderSide(color: Color(0xFFD3D3D3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                    borderSide: BorderSide(width: 2),
-                  ),
+                30.verticalSpace,
+                CustomButton(
+                  onTap: generateMealPlans,
+                  bgColor: Colors.teal,
+                  buttonText: state.mealPlanWithDailyNutrition == null
+                      ? "Generate Meal Plans"
+                      : "Re - Generate Meal Plans",
                 ),
-                dropdownMenuEntries: List.generate(
-                  MealTypes.values.length,
-                  (index) => DropdownMenuEntry(
-                    value: MealTypes.values[index].name,
-                    label: MealTypes.values[index].name,
-                  ),
-                ),
-              ),
-              30.verticalSpace,
-              CustomButton(
-                onTap: generateMealPlans,
-                bgColor: Colors.teal,
-                buttonText: "Generate Meal Plans",
-              ),
-              CustomButton(
-                onTap: () {
-                  showMsgDialog(
-                    context,
-                    heading: "An error occurred",
-                    message: "An error has occurred. Please try again.",
-                    onTap: generateMealPlans,
-                  );
-                },
-                bgColor: Colors.indigo,
-                buttonText: "View Meal Plans",
-              ),
-            ],
-          ),
+                state.mealPlanWithDailyNutrition != null
+                    ? CustomButton(
+                        onTap: () {
+                          context.push(RoutePaths.viewMealPlans);
+                        },
+                        bgColor: Colors.indigo,
+                        buttonText: "View Meal Plans",
+                      )
+                    : SizedBox.shrink(),
+              ],
+            );
+          },
         ),
       ),
     );
