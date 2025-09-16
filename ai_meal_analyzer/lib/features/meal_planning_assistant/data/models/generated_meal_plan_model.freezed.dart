@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MealPlanModel {
 
- String get type; String get name; List<String> get ingredients; double get calories; Map<String, double> get macros;
+ String? get id; String get type; String get name; List<String> get ingredients; double get calories; Map<String, double> get macros;
 /// Create a copy of MealPlanModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MealPlanModelCopyWith<MealPlanModel> get copyWith => _$MealPlanModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealPlanModel&&(identical(other.type, type) || other.type == type)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&(identical(other.calories, calories) || other.calories == calories)&&const DeepCollectionEquality().equals(other.macros, macros));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealPlanModel&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&(identical(other.calories, calories) || other.calories == calories)&&const DeepCollectionEquality().equals(other.macros, macros));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,type,name,const DeepCollectionEquality().hash(ingredients),calories,const DeepCollectionEquality().hash(macros));
+int get hashCode => Object.hash(runtimeType,id,type,name,const DeepCollectionEquality().hash(ingredients),calories,const DeepCollectionEquality().hash(macros));
 
 @override
 String toString() {
-  return 'MealPlanModel(type: $type, name: $name, ingredients: $ingredients, calories: $calories, macros: $macros)';
+  return 'MealPlanModel(id: $id, type: $type, name: $name, ingredients: $ingredients, calories: $calories, macros: $macros)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MealPlanModelCopyWith<$Res>  {
   factory $MealPlanModelCopyWith(MealPlanModel value, $Res Function(MealPlanModel) _then) = _$MealPlanModelCopyWithImpl;
 @useResult
 $Res call({
- String type, String name, List<String> ingredients, double calories, Map<String, double> macros
+ String? id, String type, String name, List<String> ingredients, double calories, Map<String, double> macros
 });
 
 
@@ -65,9 +65,10 @@ class _$MealPlanModelCopyWithImpl<$Res>
 
 /// Create a copy of MealPlanModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? name = null,Object? ingredients = null,Object? calories = null,Object? macros = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? type = null,Object? name = null,Object? ingredients = null,Object? calories = null,Object? macros = null,}) {
   return _then(_self.copyWith(
-type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,ingredients: null == ingredients ? _self.ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<String>,calories: null == calories ? _self.calories : calories // ignore: cast_nullable_to_non_nullable
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MealPlanModel() when $default != null:
-return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
+return $default(_that.id,_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.mac
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)  $default,) {final _that = this;
 switch (_that) {
 case _MealPlanModel():
-return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
+return $default(_that.id,_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.mac
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String type,  String name,  List<String> ingredients,  double calories,  Map<String, double> macros)?  $default,) {final _that = this;
 switch (_that) {
 case _MealPlanModel() when $default != null:
-return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
+return $default(_that.id,_that.type,_that.name,_that.ingredients,_that.calories,_that.macros);case _:
   return null;
 
 }
@@ -213,9 +214,10 @@ return $default(_that.type,_that.name,_that.ingredients,_that.calories,_that.mac
 
 @JsonSerializable()
 class _MealPlanModel implements MealPlanModel {
-  const _MealPlanModel({required this.type, required this.name, required final  List<String> ingredients, required this.calories, required final  Map<String, double> macros}): _ingredients = ingredients,_macros = macros;
+  const _MealPlanModel({this.id, required this.type, required this.name, required final  List<String> ingredients, required this.calories, required final  Map<String, double> macros}): _ingredients = ingredients,_macros = macros;
   factory _MealPlanModel.fromJson(Map<String, dynamic> json) => _$MealPlanModelFromJson(json);
 
+@override final  String? id;
 @override final  String type;
 @override final  String name;
  final  List<String> _ingredients;
@@ -247,16 +249,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealPlanModel&&(identical(other.type, type) || other.type == type)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&(identical(other.calories, calories) || other.calories == calories)&&const DeepCollectionEquality().equals(other._macros, _macros));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealPlanModel&&(identical(other.id, id) || other.id == id)&&(identical(other.type, type) || other.type == type)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&(identical(other.calories, calories) || other.calories == calories)&&const DeepCollectionEquality().equals(other._macros, _macros));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,type,name,const DeepCollectionEquality().hash(_ingredients),calories,const DeepCollectionEquality().hash(_macros));
+int get hashCode => Object.hash(runtimeType,id,type,name,const DeepCollectionEquality().hash(_ingredients),calories,const DeepCollectionEquality().hash(_macros));
 
 @override
 String toString() {
-  return 'MealPlanModel(type: $type, name: $name, ingredients: $ingredients, calories: $calories, macros: $macros)';
+  return 'MealPlanModel(id: $id, type: $type, name: $name, ingredients: $ingredients, calories: $calories, macros: $macros)';
 }
 
 
@@ -267,7 +269,7 @@ abstract mixin class _$MealPlanModelCopyWith<$Res> implements $MealPlanModelCopy
   factory _$MealPlanModelCopyWith(_MealPlanModel value, $Res Function(_MealPlanModel) _then) = __$MealPlanModelCopyWithImpl;
 @override @useResult
 $Res call({
- String type, String name, List<String> ingredients, double calories, Map<String, double> macros
+ String? id, String type, String name, List<String> ingredients, double calories, Map<String, double> macros
 });
 
 
@@ -284,9 +286,10 @@ class __$MealPlanModelCopyWithImpl<$Res>
 
 /// Create a copy of MealPlanModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? name = null,Object? ingredients = null,Object? calories = null,Object? macros = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? type = null,Object? name = null,Object? ingredients = null,Object? calories = null,Object? macros = null,}) {
   return _then(_MealPlanModel(
-type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,ingredients: null == ingredients ? _self._ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<String>,calories: null == calories ? _self.calories : calories // ignore: cast_nullable_to_non_nullable

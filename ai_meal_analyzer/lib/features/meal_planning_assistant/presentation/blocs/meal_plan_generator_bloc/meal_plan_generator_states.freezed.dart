@@ -12,14 +12,14 @@ part of 'meal_plan_generator_states.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$MealPlanGeneratorStates {
+mixin _$MealPlanGenerationStates {
 
  MealPlanGeneratorStatus get status; GeneratedMealPlanModel? get mealPlanWithDailyNutrition; String? get error;
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MealPlanGeneratorStatesCopyWith<MealPlanGenerationStates> get copyWith => _$MealPlanGeneratorStatesCopyWithImpl<MealPlanGenerationStates>(this as MealPlanGenerationStates, _$identity);
+$MealPlanGenerationStatesCopyWith<MealPlanGenerationStates> get copyWith => _$MealPlanGenerationStatesCopyWithImpl<MealPlanGenerationStates>(this as MealPlanGenerationStates, _$identity);
 
 
 
@@ -34,15 +34,15 @@ int get hashCode => Object.hash(runtimeType,status,mealPlanWithDailyNutrition,er
 
 @override
 String toString() {
-  return 'MealPlanGeneratorStates(status: $status, mealPlanWithDailyNutrition: $mealPlanWithDailyNutrition, error: $error)';
+  return 'MealPlanGenerationStates(status: $status, mealPlanWithDailyNutrition: $mealPlanWithDailyNutrition, error: $error)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $MealPlanGeneratorStatesCopyWith<$Res>  {
-  factory $MealPlanGeneratorStatesCopyWith(MealPlanGenerationStates value, $Res Function(MealPlanGenerationStates) _then) = _$MealPlanGeneratorStatesCopyWithImpl;
+abstract mixin class $MealPlanGenerationStatesCopyWith<$Res>  {
+  factory $MealPlanGenerationStatesCopyWith(MealPlanGenerationStates value, $Res Function(MealPlanGenerationStates) _then) = _$MealPlanGenerationStatesCopyWithImpl;
 @useResult
 $Res call({
  MealPlanGeneratorStatus status, GeneratedMealPlanModel? mealPlanWithDailyNutrition, String? error
@@ -53,14 +53,14 @@ $GeneratedMealPlanModelCopyWith<$Res>? get mealPlanWithDailyNutrition;
 
 }
 /// @nodoc
-class _$MealPlanGeneratorStatesCopyWithImpl<$Res>
-    implements $MealPlanGeneratorStatesCopyWith<$Res> {
-  _$MealPlanGeneratorStatesCopyWithImpl(this._self, this._then);
+class _$MealPlanGenerationStatesCopyWithImpl<$Res>
+    implements $MealPlanGenerationStatesCopyWith<$Res> {
+  _$MealPlanGenerationStatesCopyWithImpl(this._self, this._then);
 
   final MealPlanGenerationStates _self;
   final $Res Function(MealPlanGenerationStates) _then;
 
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? mealPlanWithDailyNutrition = freezed,Object? error = freezed,}) {
   return _then(_self.copyWith(
@@ -70,7 +70,7 @@ as GeneratedMealPlanModel?,error: freezed == error ? _self.error : error // igno
 as String?,
   ));
 }
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -87,7 +87,7 @@ $GeneratedMealPlanModelCopyWith<$Res>? get mealPlanWithDailyNutrition {
 
 
 /// Adds pattern-matching-related methods to [MealPlanGenerationStates].
-extension MealPlanGeneratorStatesPatterns on MealPlanGenerationStates {
+extension MealPlanGenerationStatesPatterns on MealPlanGenerationStates {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -227,7 +227,7 @@ class _MealPlanGeneratorStates implements MealPlanGenerationStates {
 @override final  GeneratedMealPlanModel? mealPlanWithDailyNutrition;
 @override final  String? error;
 
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -246,14 +246,14 @@ int get hashCode => Object.hash(runtimeType,status,mealPlanWithDailyNutrition,er
 
 @override
 String toString() {
-  return 'MealPlanGeneratorStates(status: $status, mealPlanWithDailyNutrition: $mealPlanWithDailyNutrition, error: $error)';
+  return 'MealPlanGenerationStates(status: $status, mealPlanWithDailyNutrition: $mealPlanWithDailyNutrition, error: $error)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$MealPlanGeneratorStatesCopyWith<$Res> implements $MealPlanGeneratorStatesCopyWith<$Res> {
+abstract mixin class _$MealPlanGeneratorStatesCopyWith<$Res> implements $MealPlanGenerationStatesCopyWith<$Res> {
   factory _$MealPlanGeneratorStatesCopyWith(_MealPlanGeneratorStates value, $Res Function(_MealPlanGeneratorStates) _then) = __$MealPlanGeneratorStatesCopyWithImpl;
 @override @useResult
 $Res call({
@@ -272,7 +272,7 @@ class __$MealPlanGeneratorStatesCopyWithImpl<$Res>
   final _MealPlanGeneratorStates _self;
   final $Res Function(_MealPlanGeneratorStates) _then;
 
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? mealPlanWithDailyNutrition = freezed,Object? error = freezed,}) {
   return _then(_MealPlanGeneratorStates(
@@ -283,7 +283,7 @@ as String?,
   ));
 }
 
-/// Create a copy of MealPlanGeneratorStates
+/// Create a copy of MealPlanGenerationStates
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

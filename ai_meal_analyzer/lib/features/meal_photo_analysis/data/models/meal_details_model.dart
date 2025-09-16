@@ -4,11 +4,11 @@ part 'meal_details_model.freezed.dart';
 
 part 'meal_details_model.g.dart';
 
-
 @freezed
 abstract class MealDetailsModel with _$MealDetailsModel {
   @JsonSerializable()
   const factory MealDetailsModel({
+    String? id,
     required String mealName,
     required String description,
     required double calories,
@@ -20,5 +20,6 @@ abstract class MealDetailsModel with _$MealDetailsModel {
     required List<String> ingredientsList,
   }) = _MealDetailsModel;
 
-  factory MealDetailsModel.fromJson(Map<String, Object?> json) => _$MealDetailsModelFromJson(json);
+  factory MealDetailsModel.fromJson(Map<String, Object?> json) =>
+      _$MealDetailsModelFromJson(json);
 }

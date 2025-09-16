@@ -8,6 +8,7 @@ part of 'generated_meal_plan_model.dart';
 
 _MealPlanModel _$MealPlanModelFromJson(Map<String, dynamic> json) =>
     _MealPlanModel(
+      id: json['id'] as String?,
       type: json['type'] as String,
       name: json['name'] as String,
       ingredients: (json['ingredients'] as List<dynamic>)
@@ -21,6 +22,7 @@ _MealPlanModel _$MealPlanModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$MealPlanModelToJson(_MealPlanModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'type': instance.type,
       'name': instance.name,
       'ingredients': instance.ingredients,

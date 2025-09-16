@@ -6,7 +6,7 @@ part 'meal_plan_generator_states.freezed.dart';
 enum MealPlanGeneratorStatus { initial, loading, success, error }
 
 @freezed
-abstract class MealPlanGenerationStates with _$MealPlanGeneratorStates {
+abstract class MealPlanGenerationStates with _$MealPlanGenerationStates {
   const factory MealPlanGenerationStates({
     @Default(MealPlanGeneratorStatus.initial) MealPlanGeneratorStatus status,
     GeneratedMealPlanModel? mealPlanWithDailyNutrition,
