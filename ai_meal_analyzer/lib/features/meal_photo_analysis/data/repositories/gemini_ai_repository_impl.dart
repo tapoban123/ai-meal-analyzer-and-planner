@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:ai_meal_analyzer/core/error_cubit.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/datasources/gemini_ai_datasource.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
@@ -31,6 +32,7 @@ class GeminiAiRepositoryImpl extends GeminiAiRepository {
           geminiResponseFormatter(response.body),
         );
       }
+      error = Error(statusCode: response.statusCode, message: response.body);
       throw Exception(response.body);
     } catch (e) {
       log("[ANALYSE PHOTO ERROR] $e");

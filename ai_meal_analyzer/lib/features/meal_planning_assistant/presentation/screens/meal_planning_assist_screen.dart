@@ -1,4 +1,5 @@
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/widgets/custom_button.dart';
+import 'package:ai_meal_analyzer/core/error_cubit.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
@@ -38,7 +39,7 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
     if (retrying) {
       context.pop();
     }
-    if(_formKey.currentState!.validate()){
+    if (_formKey.currentState!.validate()) {
       final mealDetails = UserMealDetails(
         preferences: preferencesController.text.trim(),
         restrictions: restrictionsController.text.trim(),
@@ -68,8 +69,12 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
               if (state.mealPlanWithDailyNutrition == null) {
                 showMsgDialog(
                   context,
-                  heading: "An error occurred",
-                  message: "An error has occurred. Please try again.",
+                  heading: error != null
+                      ? error!.statusCode.toString()
+                      : "An error occurred",
+                  message: error != null
+                      ? error!.message.toString()
+                      : "An error has occurred. Please try again.",
                   onTap: () => generateMealPlans(retrying: true),
                 );
               } else {

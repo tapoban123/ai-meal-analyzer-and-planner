@@ -37,57 +37,63 @@ class MealAnalysisResultViewer extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            image != null
-                ? Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: Image.file(File(image!.path)),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              image != null
+                  ? SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Image.file(
+                              File(image!.path),
+                              height: 240.h,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          15.verticalSpace,
+                        ],
                       ),
-                      15.verticalSpace,
-                    ],
-                  )
-                : SizedBox.shrink(),
-            Text(
-              mealDetails.mealName,
-              style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
-            ),
-            Text(mealDetails.description, style: TextStyle(fontSize: 18.sp)),
-            20.verticalSpace,
-            getItemText("Calories", mealDetails.calories, "kcal"),
-            getItemText("Protein", mealDetails.protein, "g"),
-            getItemText("Fiber", mealDetails.fiber, "g"),
-            getItemText("Fat", mealDetails.fat, "g"),
-            getItemText("Carbs", mealDetails.carbs, "g"),
-            getItemText("Other Nutrients", mealDetails.otherNutrients, "g"),
-            10.verticalSpace,
-            Text(
-              "Ingredients:",
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 12.0.w),
-                child: ListView.builder(
-                  itemCount: mealDetails.ingredientsList!.length,
-                  padding: EdgeInsets.only(bottom: 8.h),
-                  itemBuilder: (context, index) {
-                    return Row(
-                      spacing: 6.w,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.circle, size: 8.w),
-                        Text(mealDetails.ingredientsList![index]),
-                      ],
-                    );
-                  },
+                    )
+                  : SizedBox.shrink(),
+              Text(
+                mealDetails.mealName,
+                style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+              ),
+              Text(mealDetails.description, style: TextStyle(fontSize: 18.sp)),
+              20.verticalSpace,
+              getItemText("Calories", mealDetails.calories, "kcal"),
+              getItemText("Protein", mealDetails.protein, "g"),
+              getItemText("Fiber", mealDetails.fiber, "g"),
+              getItemText("Fat", mealDetails.fat, "g"),
+              getItemText("Carbs", mealDetails.carbs, "g"),
+              getItemText("Other Nutrients", mealDetails.otherNutrients, "g"),
+              10.verticalSpace,
+              Text(
+                "Ingredients:",
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+              Wrap(
+                spacing: 12,
+                children: List.generate(
+                  mealDetails.ingredientsList!.length,
+                  (index) => Card(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 7.0.w,
+                        vertical: 4.0.w,
+                      ),
+                      child: Text(mealDetails.ingredientsList![index]),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

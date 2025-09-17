@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:ai_meal_analyzer/core/error_cubit.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/data/datasources/ai_meal_planner_datasource.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/data/models/generated_meal_plan_model.dart';
@@ -34,6 +35,7 @@ class AiMealPlannerGeneratorRepositoryImpl
         );
         return result;
       }
+      error = Error(statusCode: response.statusCode, message: response.body);
       throw Exception(response.body);
     } catch (e) {
       log("[MEAL PLAN GENERATION ERROR] $e");
