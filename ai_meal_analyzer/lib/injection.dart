@@ -2,7 +2,8 @@ import 'package:ai_meal_analyzer/core/local_storage_service/data/datasources/sqf
 import 'package:ai_meal_analyzer/core/local_storage_service/data/datasources/sqlflite_data_source_impl.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/data/repository/sqflite_repository_impl.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/repository/sqflite_repository.dart';
-import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_from_table.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_all_analysis_reports.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_all_meal_plans.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/insert_into_meal_analysis_table.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/insert_into_meal_plans_usecase.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_generated_meal_plans_usecase.dart';
@@ -26,6 +27,7 @@ import 'package:get_it/get_it.dart';
 final GetIt getIt = GetIt.instance;
 
 void initServices() {
+  // blocs
   getIt.registerFactory(
     () => AiImgAnalyserBloc(
       analyseImageUsecase: getIt(),
@@ -41,10 +43,13 @@ void initServices() {
   getIt.registerFactory(
     () => HistoryAndAnalyticsBloc(
       retrieveMealAnalysisTableUsecase: getIt(),
-      deleteFromTableUsecase: getIt(),
+      deleteAllAnalysisReportsUsecase: getIt(),
+      deleteAllMealPlansUsecase: getIt(),
       retrieveGeneratedMealPlansUsecase: getIt(),
     ),
   );
+
+  // usecases
   getIt.registerLazySingleton(
     () => AnalyseImageUsecase(geminiAiRepository: getIt()),
   );
@@ -63,7 +68,10 @@ void initServices() {
     () => RetrieveMealAnalysisTableUsecase(sqfliteRepository: getIt()),
   );
   getIt.registerLazySingleton(
-    () => DeleteFromTableUsecase(sqfliteRepository: getIt()),
+    () => DeleteAllAnalysisReportsUsecase(sqfliteRepository: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => DeleteAllMealPlansUsecase(sqfliteRepository: getIt()),
   );
   getIt.registerLazySingleton(
     () => InsertIntoMealPlansUsecase(sqfliteRepository: getIt()),
@@ -72,6 +80,7 @@ void initServices() {
     () => RetrieveGeneratedMealPlansUsecase(sqfliteRepository: getIt()),
   );
 
+  // repositories
   getIt.registerLazySingleton<GeminiAiRepository>(
     () => GeminiAiRepositoryImpl(geminiAiDatasource: getIt()),
   );
@@ -83,6 +92,7 @@ void initServices() {
     () => SqfliteRepositoryImpl(sqfliteDatasource: getIt()),
   );
 
+  // datasource
   getIt.registerLazySingleton<GeminiAiDatasource>(
     () => GeminiAiDatasourceImpl(),
   );

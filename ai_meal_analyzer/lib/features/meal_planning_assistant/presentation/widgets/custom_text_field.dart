@@ -34,7 +34,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.r),
-          borderSide: BorderSide(width: 2)
+          borderSide: BorderSide(width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.r),
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.r),
+          borderSide: BorderSide(color: Colors.red, width: 2),
         ),
         hintText: widget.hintText,
         hintStyle: TextStyle(color: Color(0xFF848884)),
@@ -42,6 +50,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       maxLines: widget.maxLines,
       keyboardType: widget.keyboardType,
       textCapitalization: TextCapitalization.sentences,
+      validator: (value) {
+        if (value != null && value.isEmpty) {
+          return "Please fill the required details.";
+        }
+        return null;
+      },
       onTapUpOutside: (event) {
         _focusNode.unfocus();
       },

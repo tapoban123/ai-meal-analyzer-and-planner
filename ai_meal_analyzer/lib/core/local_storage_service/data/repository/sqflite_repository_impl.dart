@@ -173,7 +173,7 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
   }
 
   @override
-  Future<void> deleteEntireTable({required String tableName}) async{
-    await _sqfliteDatasource.deleteEntireTable(tableName: tableName);
+  Future<void> deleteAllRowsFromTable({required String tableName}) async{
+    await _sqfliteDatasource.deleteAllRowsFromTable(tableName: tableName);
   }
 }

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          title: "AI Meal Analyzer",
+          title: "AI Meal Analyzer & Planner",
           theme: ThemeData.light(useMaterial3: true).copyWith(
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: AppBarTheme(

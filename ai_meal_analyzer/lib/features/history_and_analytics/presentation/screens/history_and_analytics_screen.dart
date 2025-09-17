@@ -1,3 +1,4 @@
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_states.dart';
@@ -26,16 +27,7 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("History & Analytics"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.delete_forever, color: Colors.red),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text("History & Analytics"), centerTitle: true),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: BlocConsumer<HistoryAndAnalyticsBloc, HistoryAndAnalyticsStates>(
@@ -43,80 +35,129 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
           builder: (context, state) {
             return Column(
               children: [
-                Text(
-                  "Meal Analysis History",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                getSectionHeading(
+                  heading: "Meal Analysis History",
+                  onDelete: () {
+                    showMsgDialog(
+                      context,
+                      heading: "Delete Meal Analysis Reports?",
+                      message:
+                          "Are you sure you want to delete your meal analysis reports history?",
+                      onTap: () {
+                        context.read<HistoryAndAnalyticsBloc>().add(
+                          DeleteMealAnalysisDataEvent(),
+                        );
+                      },
+                      showCancelButton: true,
+                      buttonText: "Delete",
+                      buttonColor: Colors.red,
+                    );
+                  },
                 ),
                 Expanded(
                   flex: 1,
-                  child:
-                      state.mealAnalysisData != null &&
-                          state.mealAnalysisData!.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: state.mealAnalysisData!.length,
-                          itemBuilder: (context, index) {
-                            final mealData = state.mealAnalysisData![index];
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    padding: EdgeInsets.all(6.w),
+                    child:
+                        state.mealAnalysisData != null &&
+                            state.mealAnalysisData!.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: state.mealAnalysisData!.length,
+                            itemBuilder: (context, index) {
+                              final mealData = state.mealAnalysisData![index];
 
-                            return Card(
-                              child: ListTile(
-                                title: Text(mealData.mealName),
-                                subtitle: Text(
-                                  mealData.description,
-                                  overflow: TextOverflow.ellipsis,
+                              return Card(
+                                color: Colors.tealAccent,
+                                child: ListTile(
+                                  title: Text(
+                                    mealData.mealName,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    mealData.description,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  onTap: () {
+                                    context.push(
+                                      RoutePaths.analysisResultHistory,
+                                      extra: mealData,
+                                    );
+                                  },
                                 ),
-                                onTap: () {
-                                  context.push(
-                                    RoutePaths.analysisResultHistory,
-                                    extra: mealData,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        )
-                      : Center(child: Text("No history")),
+                              );
+                            },
+                          )
+                        : noDataWidget("No Meal Analysis Reports History"),
+                  ),
                 ),
                 30.verticalSpace,
-                Text(
-                  "Meal Plan History",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                getSectionHeading(
+                  heading: "Meal Plans History",
+                  onDelete: () {
+                    showMsgDialog(
+                      context,
+                      heading: "Delete Meal Plans?",
+                      message:
+                          "Are you sure you want to delete your meal plans history?",
+                      onTap: () {
+                        context.read<HistoryAndAnalyticsBloc>().add(
+                          DeleteMealPlanDataEvent(),
+                        );
+                      },
+                      showCancelButton: true,
+                      buttonText: "Delete",
+                      buttonColor: Colors.red,
+                    );
+                  },
                 ),
                 Expanded(
                   flex: 1,
-                  child:
-                      state.mealPlansData != null &&
-                          state.mealPlansData!.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: state.mealPlansData!.length,
-                          padding: EdgeInsets.only(bottom: 10.w),
-                          itemBuilder: (context, index) {
-                            final meal = state.mealPlansData![index];
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 6.w),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    padding: EdgeInsets.all(6.w),
+                    child:
+                        state.mealPlansData != null &&
+                            state.mealPlansData!.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: state.mealPlansData!.length,
+                            padding: EdgeInsets.only(bottom: 10.w),
+                            itemBuilder: (context, index) {
+                              final meal = state.mealPlansData![index];
 
-                            return Card(
-                              child: ListTile(
-                                title: Text(
-                                  "Meal Plan of ${formatDateTimeForMealPlanTitle(meal.creationDate!)}",
+                              return Card(
+                                color: Colors.limeAccent,
+                                child: ListTile(
+                                  title: Text(
+                                    "Meal Plan of ${formatDateTimeForMealPlanTitle(meal.creationDate!)}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    context.push(
+                                      RoutePaths.viewMealsPlansHistory,
+                                      extra: [
+                                        meal.mealPlans,
+                                        meal.totalDailyNutrition,
+                                      ],
+                                    );
+                                  },
                                 ),
-                                onTap: () {
-                                  context.push(
-                                    RoutePaths.viewMealsPlansHistory,
-                                    extra: [
-                                      meal.mealPlans,
-                                      meal.totalDailyNutrition,
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        )
-                      : Center(child: Text("No Meal Plans History")),
+                              );
+                            },
+                          )
+                        : noDataWidget("No Meal Plans History"),
+                  ),
                 ),
               ],
             );
@@ -128,5 +169,46 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
 
   String formatDateTimeForMealPlanTitle(DateTime datetime) {
     return DateFormat("EEE, dd MMM y, K:m a").format(datetime);
+  }
+
+  Widget noDataWidget(String text) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.not_interested, size: 50.w),
+          Text(
+            text,
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getSectionHeading({
+    required String heading,
+    required VoidCallback onDelete,
+  }) {
+    return SizedBox(
+      height: 40.h,
+      width: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            heading,
+            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+          ),
+          Positioned(
+            right: 0,
+            child: IconButton(
+              onPressed: onDelete,
+              icon: Icon(Icons.delete, color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

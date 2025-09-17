@@ -24,38 +24,33 @@ class MealPlanningAssistScreen extends StatefulWidget {
 }
 
 class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
-  final TextEditingController preferencesController = TextEditingController(
-    text: "Non-vegetarian",
-  );
-  final TextEditingController restrictionsController = TextEditingController(
-    text: "Gluten-free, No peanuts",
-  );
-  final TextEditingController caloriesController = TextEditingController(
-    text: "2000",
-  );
-  final TextEditingController macroGoalsController = TextEditingController(
-    text: "Protein: 100g, Carbs: 250g, Fats: 60g",
-  );
+  final TextEditingController preferencesController = TextEditingController();
+  final TextEditingController restrictionsController = TextEditingController();
+  final TextEditingController caloriesController = TextEditingController();
+  final TextEditingController macroGoalsController = TextEditingController();
   final TextEditingController mealTypeController = TextEditingController(
     text: MealTypes.ALL.name,
   );
   MealTypes mealType = MealTypes.ALL;
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   void generateMealPlans({bool retrying = false}) {
     if (retrying) {
       context.pop();
     }
-    final mealDetails = UserMealDetails(
-      preferences: preferencesController.text.trim(),
-      restrictions: restrictionsController.text.trim(),
-      macroGoals: macroGoalsController.text.trim(),
-      calories: double.parse(caloriesController.text.trim()),
-      mealType: mealTypeController.text.trim(),
-    );
+    if(_formKey.currentState!.validate()){
+      final mealDetails = UserMealDetails(
+        preferences: preferencesController.text.trim(),
+        restrictions: restrictionsController.text.trim(),
+        macroGoals: macroGoalsController.text.trim(),
+        calories: double.parse(caloriesController.text.trim()),
+        mealType: mealTypeController.text.trim(),
+      );
 
-    context.read<MealPlanGenerationBloc>().add(
-      GenerateMealPlanEvent(mealDetails: mealDetails),
-    );
+      context.read<MealPlanGenerationBloc>().add(
+        GenerateMealPlanEvent(mealDetails: mealDetails),
+      );
+    }
   }
 
   @override
@@ -91,29 +86,38 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
             return Column(
               spacing: 10.h,
               children: [
-                CustomTextField(
-                  textController: preferencesController,
-                  keyboardType: TextInputType.text,
-                  hintText: "Dietary Preferences",
-                  maxLines: 2,
-                ),
-                CustomTextField(
-                  textController: restrictionsController,
-                  keyboardType: TextInputType.text,
-                  hintText: "Restrictions",
-                  maxLines: 2,
-                ),
-                CustomTextField(
-                  textController: caloriesController,
-                  keyboardType: TextInputType.number,
-                  hintText: "Calories",
-                  maxLines: 1,
-                ),
-                CustomTextField(
-                  textController: macroGoalsController,
-                  keyboardType: TextInputType.text,
-                  hintText: "Macro Goals",
-                  maxLines: 2,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    spacing: 14.h,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextField(
+                        textController: preferencesController,
+                        keyboardType: TextInputType.text,
+                        hintText: "Dietary Preferences",
+                        maxLines: 2,
+                      ),
+                      CustomTextField(
+                        textController: restrictionsController,
+                        keyboardType: TextInputType.text,
+                        hintText: "Restrictions",
+                        maxLines: 2,
+                      ),
+                      CustomTextField(
+                        textController: caloriesController,
+                        keyboardType: TextInputType.number,
+                        hintText: "Calories",
+                        maxLines: 1,
+                      ),
+                      CustomTextField(
+                        textController: macroGoalsController,
+                        keyboardType: TextInputType.text,
+                        hintText: "Macro Goals",
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
                 ),
                 DropdownMenu(
                   width: double.infinity,

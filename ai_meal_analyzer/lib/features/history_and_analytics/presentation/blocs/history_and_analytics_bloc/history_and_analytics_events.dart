@@ -18,13 +18,13 @@ class AddNewMealAnalysisReportEvent extends HistoryAndAnalyticsEvents {
 class FetchMealsDataEvent extends HistoryAndAnalyticsEvents {}
 
 class DeleteMealAnalysisDataEvent extends HistoryAndAnalyticsEvents {
-  final String id;
+  final String? id;
 
-  DeleteMealAnalysisDataEvent({required this.id});
+  DeleteMealAnalysisDataEvent({this.id});
 }
 
 class DeleteMealPlanDataEvent extends HistoryAndAnalyticsEvents {
-  final String id;
+  final String? id;
 
-  DeleteMealPlanDataEvent({required this.id});
+  DeleteMealPlanDataEvent({this.id});
 }

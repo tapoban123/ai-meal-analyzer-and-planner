@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_from_table.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_all_analysis_reports.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_all_meal_plans.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_generated_meal_plans_usecase.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_meal_analysis_table.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
@@ -10,17 +11,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HistoryAndAnalyticsBloc
     extends Bloc<HistoryAndAnalyticsEvents, HistoryAndAnalyticsStates> {
   final RetrieveMealAnalysisTableUsecase _retrieveMealAnalysisTableUsecase;
-  final DeleteFromTableUsecase _deleteFromTableUsecase;
+  final DeleteAllAnalysisReportsUsecase _deleteAllAnalysisReportsUsecase;
+  final DeleteAllMealPlansUsecase _deleteAllMealPlansUsecase;
   final RetrieveGeneratedMealPlansUsecase _retrieveGeneratedMealPlansUsecase;
 
   HistoryAndAnalyticsBloc({
     required RetrieveMealAnalysisTableUsecase retrieveMealAnalysisTableUsecase,
-    required DeleteFromTableUsecase deleteFromTableUsecase,
+    required DeleteAllAnalysisReportsUsecase deleteAllAnalysisReportsUsecase,
+    required DeleteAllMealPlansUsecase deleteAllMealPlansUsecase,
     required RetrieveGeneratedMealPlansUsecase
     retrieveGeneratedMealPlansUsecase,
   }) : _retrieveMealAnalysisTableUsecase = retrieveMealAnalysisTableUsecase,
-       _deleteFromTableUsecase = deleteFromTableUsecase,
        _retrieveGeneratedMealPlansUsecase = retrieveGeneratedMealPlansUsecase,
+       _deleteAllMealPlansUsecase = deleteAllMealPlansUsecase,
+       _deleteAllAnalysisReportsUsecase = deleteAllAnalysisReportsUsecase,
        super(HistoryAndAnalyticsStates()) {
     on<AddNewMealPlanEvent>(_addNewMealPlan);
     on<AddNewMealAnalysisReportEvent>(_addNewMealAnalysisReport);
@@ -68,13 +72,20 @@ class HistoryAndAnalyticsBloc
     );
   }
 
-  void _deleteMealPlansData(
-    DeleteMealPlanDataEvent event,
-    Emitter emit,
-  ) async {}
+  void _deleteMealPlansData(DeleteMealPlanDataEvent event, Emitter emit) async {
+    if (event.id == null) {
+      await _deleteAllMealPlansUsecase.call();
+      emit(state.copyWith(mealPlansData: []));
+    }
+  }
 
   void _deleteMealAnalysisData(
     DeleteMealAnalysisDataEvent event,
     Emitter emit,
-  ) async {}
+  ) async {
+    if (event.id == null) {
+      await _deleteAllAnalysisReportsUsecase.call();
+      emit(state.copyWith(mealAnalysisData: []));
+    }
+  }
 }

@@ -20,5 +20,5 @@ abstract class SqfliteRepository {
 
   Future<void> deleteFromTable({required String tableName, required String id});
 
-  Future<void> deleteEntireTable({required String tableName});
+  Future<void> deleteAllRowsFromTable({required String tableName});
 }

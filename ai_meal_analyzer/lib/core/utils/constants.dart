@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -51,12 +52,14 @@ void showMsgDialog(
   required String message,
   required VoidCallback onTap,
   String? buttonText,
+  Color? buttonColor,
+  bool showCancelButton = false,
 }) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
       child: Padding(
-        padding:  EdgeInsets.all(20.0.w),
+        padding: EdgeInsets.all(20.0.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 12.h,
@@ -71,13 +74,36 @@ void showMsgDialog(
               style: TextStyle(fontSize: 16.sp),
               textAlign: TextAlign.center,
             ),
-            ElevatedButton(
-              onPressed: onTap,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
-              child: Text(
-                buttonText ?? "Retry",
-                style: TextStyle(color: Colors.white),
-              ),
+            Row(
+              mainAxisAlignment: showCancelButton
+                  ? MainAxisAlignment.spaceEvenly
+                  : MainAxisAlignment.center,
+              children: [
+                showCancelButton
+                    ? ElevatedButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo,
+                        ),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: buttonColor ?? Colors.indigo,
+                  ),
+                  child: Text(
+                    buttonText ?? "Retry",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

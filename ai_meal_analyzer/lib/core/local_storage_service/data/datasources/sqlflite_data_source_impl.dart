@@ -93,7 +93,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
   }
 
   @override
-  Future<void> deleteEntireTable({required String tableName}) async {
+  Future<void> deleteAllRowsFromTable({required String tableName}) async {
     await _db.delete(tableName);
   }
 }
