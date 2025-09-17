@@ -30,8 +30,7 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
       appBar: AppBar(title: Text("History & Analytics"), centerTitle: true),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: BlocConsumer<HistoryAndAnalyticsBloc, HistoryAndAnalyticsStates>(
-          listener: (context, state) {},
+        child: BlocBuilder<HistoryAndAnalyticsBloc, HistoryAndAnalyticsStates>(
           builder: (context, state) {
             return Column(
               children: [
@@ -47,6 +46,7 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
                         context.read<HistoryAndAnalyticsBloc>().add(
                           DeleteMealAnalysisDataEvent(),
                         );
+                        context.pop();
                       },
                       showCancelButton: true,
                       buttonText: "Delete",
@@ -109,6 +109,7 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
                         context.read<HistoryAndAnalyticsBloc>().add(
                           DeleteMealPlanDataEvent(),
                         );
+                        context.pop();
                       },
                       showCancelButton: true,
                       buttonText: "Delete",

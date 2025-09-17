@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/widgets/custom_button.dart';
@@ -46,7 +47,7 @@ class MealPhotoAnalysisScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0.w),
         child: BlocConsumer<AiImgAnalyserBloc, AiImgAnalyserState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state.status == AIImgAnalyserStatus.loading) {
               showProgressLoaderDialog(context);
             } else if (state.status == AIImgAnalyserStatus.success) {
@@ -68,10 +69,14 @@ class MealPhotoAnalysisScreen extends StatelessWidget {
               } else {
                 context.read<HistoryAndAnalyticsBloc>().add(
                   AddNewMealAnalysisReportEvent(
-                    newMealDetails: state.mealDetails!,
+                    newMealDetails: state.mealDetails!.copyWith(
+                      image: jsonEncode(await state.image!.readAsBytes()),
+                    ),
                   ),
                 );
-                context.push(RoutePaths.analysisResult);
+                if (context.mounted) {
+                  context.push(RoutePaths.analysisResult);
+                }
               }
             }
           },
@@ -89,7 +94,11 @@ class MealPhotoAnalysisScreen extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12.r),
-                        child: Image.file(File(state.image!.path)),
+                        child: Image.file(
+                          File(state.image!.path),
+                          height: getScreenHeight(context) * 0.36,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     CustomButton(

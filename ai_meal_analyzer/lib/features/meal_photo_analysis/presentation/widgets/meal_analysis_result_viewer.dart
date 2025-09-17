@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai_meal_analyzer/core/utils/constants.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,12 +8,12 @@ import 'package:image_picker/image_picker.dart';
 
 class MealAnalysisResultViewer extends StatelessWidget {
   final MealDetailsModel mealDetails;
-  final XFile? image;
+  final XFile image;
 
   const MealAnalysisResultViewer({
     super.key,
     required this.mealDetails,
-    this.image,
+    required this.image,
   });
 
   Widget getItemText(String heading, double data, String unit) {
@@ -41,25 +42,31 @@ class MealAnalysisResultViewer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              image != null
-                  ? SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
-                            child: Image.file(
-                              File(image!.path),
-                              height: 240.h,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          15.verticalSpace,
-                        ],
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: FutureBuilder(
+                        future: image.readAsBytes(),
+                        builder: (context, asyncSnapshot) {
+                          if (asyncSnapshot.hasData) {
+                            return Image.memory(
+                              asyncSnapshot.data!,
+                              height: getScreenHeight(context) * 0.36,
+                              fit: BoxFit.cover,
+                            );
+                          }
+                          return SizedBox.shrink();
+                        },
                       ),
-                    )
-                  : SizedBox.shrink(),
+                    ),
+                    15.verticalSpace,
+                  ],
+                ),
+              ),
               Text(
                 mealDetails.mealName,
                 style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
@@ -92,6 +99,7 @@ class MealAnalysisResultViewer extends StatelessWidget {
                   ),
                 ),
               ),
+              20.verticalSpace,
             ],
           ),
         ),

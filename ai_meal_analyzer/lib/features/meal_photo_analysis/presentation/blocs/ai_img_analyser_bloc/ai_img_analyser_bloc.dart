@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/insert_into_meal_analysis_table.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
@@ -23,6 +24,7 @@ class AiImgAnalyserBloc extends Bloc<AiImgAnalyserEvents, AiImgAnalyserState> {
   }
 
   void _captureImage(CaptureImageEvent event, Emitter emit) async {
+    emit(state.copyWith(status: AIImgAnalyserStatus.initial));
     final image = await pickImage(imgSource: event.imgSource);
     if (image != null) {
       emit(state.copyWith(image: image));
@@ -39,7 +41,10 @@ class AiImgAnalyserBloc extends Bloc<AiImgAnalyserEvents, AiImgAnalyserState> {
 
       if (analysisResult != null) {
         final resultWithId = analysisResult.copyWith(id: Uuid().v1());
-        await _insertIntoMealAnalysisTable.call(meal: resultWithId);
+        await _insertIntoMealAnalysisTable.call(
+          meal: resultWithId,
+          image: File(state.image!.path),
+        );
       }
 
       emit(

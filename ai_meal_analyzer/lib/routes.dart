@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/screens/home_nav_controller_screen.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
@@ -8,6 +10,7 @@ import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/s
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/widgets/generated_meal_plans_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RoutePaths {
   RoutePaths._();
@@ -38,9 +41,17 @@ final GoRouter router = GoRouter(
       path: RoutePaths.analysisResultHistory,
       builder: (context, state) {
         final mealDetails = state.extra as MealDetailsModel;
+        log(mealDetails.image.toString());
         return Scaffold(
           appBar: AppBar(title: Text("Meal Analysis History")),
-          body: MealAnalysisResultViewer(mealDetails: mealDetails),
+          body: MealAnalysisResultViewer(
+            mealDetails: mealDetails,
+            image: XFile.fromData(
+              Uint8List.fromList(
+                List<int>.from(jsonDecode(mealDetails.image!)),
+              ),
+            ),
+          ),
         );
       },
     ),

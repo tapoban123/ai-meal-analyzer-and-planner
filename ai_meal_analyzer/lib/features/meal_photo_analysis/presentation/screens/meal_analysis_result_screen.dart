@@ -20,7 +20,7 @@ class MealAnalysisResultScreen extends StatelessWidget {
             final mealDetails = state.mealDetails!;
             return MealAnalysisResultViewer(
               mealDetails: mealDetails,
-              image: state.image,
+              image: state.image!,
             );
           }
           return SizedBox.shrink();

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:ai_meal_analyzer/core/local_storage_service/data/datasources/sqflite_datasource.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/data/datasources/sqlflite_data_source_impl.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/repository/sqflite_repository.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_details_model.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/data/models/generated_meal_plan_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SqfliteRepositoryImpl extends SqfliteRepository {
   final SqfliteDatasource _sqfliteDatasource;
@@ -15,11 +17,14 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
 
   @override
   Future<void> insertIntoMealAnalysisTable({
+    required File image,
     required MealDetailsModel meal,
   }) async {
     try {
       final mealDetails = meal.toJson();
       mealDetails["ingredientsList"] = jsonEncode(meal.ingredientsList);
+      mealDetails["image"] = jsonEncode(await image.readAsBytes());
+      log(mealDetails.toString());
 
       _sqfliteDatasource.insertIntoTable(
         tableName: TableNames.mealAnalysisReportsTable,
@@ -69,6 +74,7 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
         data.add(
           MealDetailsModel(
             id: item["id"] as String,
+            image: item["image"] as String,
             mealName: item["mealName"] as String,
             description: item["description"] as String,
             calories: double.parse(item["calories"].toString()),
@@ -103,65 +109,43 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
       for (final item in results) {
         final id = item["id"] as String;
 
-       if (!data.any((element) => element.id == id)) {
-         for (final meal in results) {
-           if (meal["id"] == id) {
-             final mealPlanModel = MealPlanModel(
-               type: meal["type"] as String,
-               name: meal["name"] as String,
-               ingredients: List<String>.from(
-                 jsonDecode(meal["ingredients"] as String),
-               ),
-               calories: double.parse(meal["calories"].toString()),
-               macros: Map<String, double>.from(
-                 jsonDecode(meal["macros"] as String),
-               ),
-               mealId: meal["mealId"] as String,
-             );
+        if (!data.any((element) => element.id == id)) {
+          for (final meal in results) {
+            if (meal["id"] == id) {
+              final mealPlanModel = MealPlanModel(
+                type: meal["type"] as String,
+                name: meal["name"] as String,
+                ingredients: List<String>.from(
+                  jsonDecode(meal["ingredients"] as String),
+                ),
+                calories: double.parse(meal["calories"].toString()),
+                macros: Map<String, double>.from(
+                  jsonDecode(meal["macros"] as String),
+                ),
+                mealId: meal["mealId"] as String,
+              );
 
-             mealPlans.add(mealPlanModel);
-           }
-         }
-         final generatedMealPlan = GeneratedMealPlanModel(
-           id: id,
-           mealPlans: mealPlans,
-           creationDate: DateTime.fromMillisecondsSinceEpoch(
-             item["creationDate"] as int,
-           ),
-           totalDailyNutrition: Map<String, double>.from(
-             jsonDecode(item["totalDailyNutrition"] as String),
-           ),
-         );
-         data.add(generatedMealPlan);
-       }
+              mealPlans.add(mealPlanModel);
+            }
+          }
+          final generatedMealPlan = GeneratedMealPlanModel(
+            id: id,
+            mealPlans: mealPlans,
+            creationDate: DateTime.fromMillisecondsSinceEpoch(
+              item["creationDate"] as int,
+            ),
+            totalDailyNutrition: Map<String, double>.from(
+              jsonDecode(item["totalDailyNutrition"] as String),
+            ),
+          );
+          data.add(generatedMealPlan);
+        }
       }
       return data;
     } catch (e) {
       log("[FETCH FROM MEAL ANALYSIS TABLE ERROR] $e");
       return [];
     }
-  }
-
-  @override
-  Future<MealDetailsModel> retrieveSpecificFromMealAnalysisTable({
-    required String id,
-  }) async {
-    final result = await _sqfliteDatasource.retrieveSpecificFromTable(
-      tableName: TableNames.mealAnalysisReportsTable,
-      id: id,
-    );
-
-    return MealDetailsModel.fromJson(result.first).copyWith(
-      ingredientsList: jsonDecode(result.first["ingredientsList"] as String),
-    );
-  }
-
-  @override
-  Future<GeneratedMealPlanModel> retrieveSpecificFromMealPlansTable({
-    required String id,
-  }) async {
-    // TODO: implement retrieveSpecificFromMealPlansTable
-    throw UnimplementedError();
   }
 
   @override
@@ -173,7 +157,7 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
   }
 
   @override
-  Future<void> deleteAllRowsFromTable({required String tableName}) async{
+  Future<void> deleteAllRowsFromTable({required String tableName}) async {
     await _sqfliteDatasource.deleteAllRowsFromTable(tableName: tableName);
   }
 }

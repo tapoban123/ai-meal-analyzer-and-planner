@@ -9,6 +9,7 @@ abstract class MealDetailsModel with _$MealDetailsModel {
   @JsonSerializable()
   const factory MealDetailsModel({
     String? id,
+    String? image,
     required String mealName,
     required String description,
     required double calories,

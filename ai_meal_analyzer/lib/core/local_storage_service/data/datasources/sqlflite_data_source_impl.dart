@@ -16,6 +16,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
     db.execute("""
       CREATE TABLE IF NOT EXISTS ${TableNames.mealAnalysisReportsTable} (
       id TEXT PRIMARY KEY,
+      image TEXT,
       mealName TEXT,
       description TEXT,
       calories DECIMAL(8,2),
