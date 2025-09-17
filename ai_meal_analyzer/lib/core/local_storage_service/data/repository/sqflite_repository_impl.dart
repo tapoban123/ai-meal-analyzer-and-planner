@@ -36,51 +36,110 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
   }) async {
     try {
       final mealDetails = meal.mealPlans;
-      // mealDetails["ingredientsList"] = meal.ingredientsList.toString();
 
-      // _sqfliteDatasource.insertIntoTable(
-      //   tableName: TableNames.mealAnalysisReportsTable,
-      //   json: mealDetails,
-      // );
+      for (final eachMeal in mealDetails) {
+        final json = eachMeal.toJson();
+        json["totalDailyNutrition"] = jsonEncode(meal.totalDailyNutrition);
+        json["ingredients"] = jsonEncode(eachMeal.ingredients);
+        json["macros"] = jsonEncode(eachMeal.macros);
+        json["creationDate"] = meal.creationDate!.millisecondsSinceEpoch;
+        json["id"] = meal.id;
+
+        _sqfliteDatasource.insertIntoTable(
+          tableName: TableNames.mealPlansTable,
+          json: json,
+        );
+      }
     } catch (e) {
-      log("[INSERT INTO MEAL ANALYSIS ERROR] $e");
+      log("[INSERT INTO MEAL PLANS ERROR] $e");
     }
   }
 
   @override
   Future<List<MealDetailsModel>> retrieveAllFromMealAnalysisTable() async {
-    final results = await _sqfliteDatasource.retrieveAllFromTable(
-      tableName: TableNames.mealAnalysisReportsTable,
-    );
-    final List<MealDetailsModel> data = [];
-
-    for (final item in results) {
-      log(item.toString());
-      log(item["ingredientsList"].toString());
-      data.add(
-        MealDetailsModel(
-          id: item["id"] as String,
-          mealName: item["mealName"] as String,
-          description: item["description"] as String,
-          calories: double.parse(item["calories"].toString()),
-          protein: double.parse(item["protein"].toString()),
-          carbs: double.parse(item["carbs"].toString()),
-          fat: double.parse(item["fat"].toString()),
-          fiber: double.parse(item["fiber"].toString()),
-          otherNutrients: double.parse(item["otherNutrients"].toString()),
-          ingredientsList: List<String>.from(
-            jsonDecode(item["ingredientsList"] as String),
-          ),
-        ),
+    try {
+      final results = await _sqfliteDatasource.retrieveAllFromTable(
+        tableName: TableNames.mealAnalysisReportsTable,
       );
+      final List<MealDetailsModel> data = [];
+
+      for (final item in results) {
+        log(item.toString());
+        log(item["ingredientsList"].toString());
+        data.add(
+          MealDetailsModel(
+            id: item["id"] as String,
+            mealName: item["mealName"] as String,
+            description: item["description"] as String,
+            calories: double.parse(item["calories"].toString()),
+            protein: double.parse(item["protein"].toString()),
+            carbs: double.parse(item["carbs"].toString()),
+            fat: double.parse(item["fat"].toString()),
+            fiber: double.parse(item["fiber"].toString()),
+            otherNutrients: double.parse(item["otherNutrients"].toString()),
+            ingredientsList: List<String>.from(
+              jsonDecode(item["ingredientsList"] as String),
+            ),
+          ),
+        );
+      }
+      return data;
+    } catch (e) {
+      log("[FETCH FROM MEAL ANALYSIS TABLE ERROR] $e");
+      return [];
     }
-    return data;
   }
 
   @override
   Future<List<GeneratedMealPlanModel>> retrieveAllFromMealPlansTable() async {
-    // TODO: implement retrieveAllFromMealPlansTable
-    throw UnimplementedError();
+    try {
+      final results = await _sqfliteDatasource.retrieveAllFromTable(
+        tableName: TableNames.mealPlansTable,
+      );
+      log(results.toString());
+      final List<GeneratedMealPlanModel> data = [];
+      final List<MealPlanModel> mealPlans = [];
+
+      for (final item in results) {
+        final id = item["id"] as String;
+
+       if (!data.any((element) => element.id == id)) {
+         for (final meal in results) {
+           if (meal["id"] == id) {
+             final mealPlanModel = MealPlanModel(
+               type: meal["type"] as String,
+               name: meal["name"] as String,
+               ingredients: List<String>.from(
+                 jsonDecode(meal["ingredients"] as String),
+               ),
+               calories: double.parse(meal["calories"].toString()),
+               macros: Map<String, double>.from(
+                 jsonDecode(meal["macros"] as String),
+               ),
+               mealId: meal["mealId"] as String,
+             );
+
+             mealPlans.add(mealPlanModel);
+           }
+         }
+         final generatedMealPlan = GeneratedMealPlanModel(
+           id: id,
+           mealPlans: mealPlans,
+           creationDate: DateTime.fromMillisecondsSinceEpoch(
+             item["creationDate"] as int,
+           ),
+           totalDailyNutrition: Map<String, double>.from(
+             jsonDecode(item["totalDailyNutrition"] as String),
+           ),
+         );
+         data.add(generatedMealPlan);
+       }
+      }
+      return data;
+    } catch (e) {
+      log("[FETCH FROM MEAL ANALYSIS TABLE ERROR] $e");
+      return [];
+    }
   }
 
   @override
@@ -111,5 +170,10 @@ class SqfliteRepositoryImpl extends SqfliteRepository {
     required String id,
   }) async {
     await _sqfliteDatasource.deleteFromTable(tableName: tableName, id: id);
+  }
+
+  @override
+  Future<void> deleteEntireTable({required String tableName}) async{
+    await _sqfliteDatasource.deleteEntireTable(tableName: tableName);
   }
 }

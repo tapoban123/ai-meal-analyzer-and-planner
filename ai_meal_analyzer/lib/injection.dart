@@ -4,6 +4,8 @@ import 'package:ai_meal_analyzer/core/local_storage_service/data/repository/sqfl
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/repository/sqflite_repository.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/delete_from_table.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/insert_into_meal_analysis_table.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/insert_into_meal_plans_usecase.dart';
+import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_generated_meal_plans_usecase.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_meal_analysis_table.dart';
 import 'package:ai_meal_analyzer/core/local_storage_service/domain/usecases/retrieve_specific_from_meal_analysis_table.dart';
 import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
@@ -31,12 +33,16 @@ void initServices() {
     ),
   );
   getIt.registerFactory(
-    () => MealPlanGenerationBloc(generateMealPlanUsecase: getIt()),
+    () => MealPlanGenerationBloc(
+      generateMealPlanUsecase: getIt(),
+      insertIntoMealPlansUsecase: getIt(),
+    ),
   );
   getIt.registerFactory(
     () => HistoryAndAnalyticsBloc(
       retrieveMealAnalysisTableUsecase: getIt(),
       deleteFromTableUsecase: getIt(),
+      retrieveGeneratedMealPlansUsecase: getIt(),
     ),
   );
   getIt.registerLazySingleton(
@@ -58,6 +64,12 @@ void initServices() {
   );
   getIt.registerLazySingleton(
     () => DeleteFromTableUsecase(sqfliteRepository: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => InsertIntoMealPlansUsecase(sqfliteRepository: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => RetrieveGeneratedMealPlansUsecase(sqfliteRepository: getIt()),
   );
 
   getIt.registerLazySingleton<GeminiAiRepository>(

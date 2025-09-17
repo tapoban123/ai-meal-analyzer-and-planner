@@ -10,18 +10,11 @@ class TableNames {
 }
 
 class SqlfliteDataSourceImpl extends SqfliteDatasource {
-  late Database db;
+  late Database _db;
 
-  @override
-  Future<void> createDBAndTables() async {
-    final dbPath = await getDatabasesPath();
-    String path = join(dbPath, "meals.db");
-
-    db = await openDatabase(
-      path,
-      onCreate: (db, version) {
-        db.execute("""
-      CREATE TABLE ${TableNames.mealAnalysisReportsTable} (
+  void _createTablesQueries(Database db) {
+    db.execute("""
+      CREATE TABLE IF NOT EXISTS ${TableNames.mealAnalysisReportsTable} (
       id TEXT PRIMARY KEY,
       mealName TEXT,
       description TEXT,
@@ -34,19 +27,30 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
       ingredientsList TEXT
       ) 
       """);
-        return db.execute("""
-      CREATE TABLE ${TableNames.mealPlansTable} (
-      mealId TEXT,
-      id TEXT PRIMARY KEY,
+    db.execute("""
+      CREATE TABLE IF NOT EXISTS ${TableNames.mealPlansTable} (
+      id TEXT,
+      mealId TEXT PRIMARY KEY,
       type TEXT,
       name TEXT,
+      creationDate INTEGER,
       ingredients TEXT,
       calories DECIMAL(8,2),
       macros TEXT,
       totalDailyNutrition TEXT
       ) 
       """);
-      },
+  }
+
+  @override
+  Future<void> createDBAndTables() async {
+    final dbPath = await getDatabasesPath();
+    String path = join(dbPath, "meals.db");
+
+    _db = await openDatabase(
+      path,
+      onCreate: (db, version) => _createTablesQueries(db),
+      onOpen: (db) => _createTablesQueries(db),
       version: 1,
     );
   }
@@ -56,7 +60,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
     required String tableName,
     required Map<String, Object?> json,
   }) async {
-    await db.insert(
+    await _db.insert(
       tableName,
       json,
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -68,7 +72,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
     required String tableName,
     required String id,
   }) async {
-    final result = await db.query(tableName, where: "id = ?", whereArgs: [id]);
+    final result = await _db.query(tableName, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
@@ -76,7 +80,7 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
   Future<List<Map<String, Object?>>> retrieveAllFromTable({
     required String tableName,
   }) async {
-    final results = await db.query(tableName);
+    final results = await _db.query(tableName);
     return results;
   }
 
@@ -85,6 +89,11 @@ class SqlfliteDataSourceImpl extends SqfliteDatasource {
     required String tableName,
     required String id,
   }) async {
-    await db.delete(tableName, where: "id = ?", whereArgs: [id]);
+    await _db.delete(tableName, where: "id = ?", whereArgs: [id]);
+  }
+
+  @override
+  Future<void> deleteEntireTable({required String tableName}) async {
+    await _db.delete(tableName);
   }
 }

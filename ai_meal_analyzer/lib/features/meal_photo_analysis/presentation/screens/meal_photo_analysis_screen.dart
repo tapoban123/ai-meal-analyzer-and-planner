@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/widgets/custom_button.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
+import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
+import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_events.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/blocs/ai_img_analyser_bloc/ai_img_analyser_state.dart';
@@ -48,7 +50,24 @@ class MealPhotoAnalysisScreen extends StatelessWidget {
               showProgressLoaderDialog(context);
             } else if (state.status == AIImgAnalyserStatus.success) {
               context.pop();
-              context.push(RoutePaths.analysisResult);
+              if (state.mealDetails == null) {
+                showMsgDialog(
+                  context,
+                  heading: "Error",
+                  message: "An error has occurred. Please try again.",
+                  onTap: () {
+                    context.read<AiImgAnalyserBloc>().add(AnalyseImageEvent());
+                    context.pop();
+                  },
+                );
+              } else {
+                context.read<HistoryAndAnalyticsBloc>().add(
+                  AddNewMealAnalysisReportEvent(
+                    newMealDetails: state.mealDetails!,
+                  ),
+                );
+                context.push(RoutePaths.analysisResult);
+              }
             }
           },
           builder: (context, state) {
@@ -93,31 +112,6 @@ class MealPhotoAnalysisScreen extends StatelessWidget {
               );
             }
             return Center(child: _ChooseImgSourceWidget(size: 100.w));
-            // return Center(
-            //   child: Column(
-            //     mainAxisSize: MainAxisSize.min,
-            //     spacing: 20.h,
-            //     children: [
-            //       Text(
-            //         "No Image selected.",
-            //         style: TextStyle(
-            //           fontSize: 35.sp,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //         textAlign: TextAlign.center,
-            //       ),
-            //       CustomButton(
-            //         onTap: () {
-            //           context.read<AiImgAnalyserBloc>().add(
-            //             CaptureImageEvent(),
-            //           );
-            //         },
-            //         bgColor: Colors.purpleAccent,
-            //         buttonText: "Upload Image",
-            //       ),
-            //     ],
-            //   ),
-            // );
           },
         ),
       ),

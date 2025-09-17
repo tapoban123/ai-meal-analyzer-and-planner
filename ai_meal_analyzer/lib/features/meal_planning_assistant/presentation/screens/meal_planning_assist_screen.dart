@@ -1,5 +1,7 @@
 import 'package:ai_meal_analyzer/core/commons/home_view/presentation/widgets/custom_button.dart';
 import 'package:ai_meal_analyzer/core/utils/constants.dart';
+import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_bloc.dart';
+import 'package:ai_meal_analyzer/features/history_and_analytics/presentation/blocs/history_and_analytics_bloc/history_and_analytics_events.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/domain/entities/user_meal_details.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_bloc.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/blocs/meal_plan_generator_bloc/meal_plan_generator_events.dart';
@@ -76,6 +78,11 @@ class _MealPlanningAssistScreenState extends State<MealPlanningAssistScreen> {
                   onTap: () => generateMealPlans(retrying: true),
                 );
               } else {
+                context.read<HistoryAndAnalyticsBloc>().add(
+                  AddNewMealPlanEvent(
+                    newMealPlan: state.mealPlanWithDailyNutrition!,
+                  ),
+                );
                 context.push(RoutePaths.viewMealPlans);
               }
             }

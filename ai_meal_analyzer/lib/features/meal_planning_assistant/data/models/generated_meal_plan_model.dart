@@ -8,7 +8,7 @@ part 'generated_meal_plan_model.g.dart';
 abstract class MealPlanModel with _$MealPlanModel{
   @JsonSerializable()
   const factory MealPlanModel({
-    String? id,
+    String? mealId,
     required String type,
     required String name,
     required List<String> ingredients,
@@ -24,6 +24,8 @@ abstract class MealPlanModel with _$MealPlanModel{
 abstract class GeneratedMealPlanModel with _$GeneratedMealPlanModel {
   @JsonSerializable()
   const factory GeneratedMealPlanModel({
+    String? id,
+    DateTime? creationDate,
     required List<MealPlanModel> mealPlans,
     required Map<String, double> totalDailyNutrition,
   }) = _GeneratedMealPlanModel;

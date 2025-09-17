@@ -5,6 +5,7 @@ import 'package:ai_meal_analyzer/features/meal_photo_analysis/data/models/meal_d
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/screens/meal_analysis_result_screen.dart';
 import 'package:ai_meal_analyzer/features/meal_photo_analysis/presentation/widgets/meal_analysis_result_viewer.dart';
 import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/screens/view_meal_plans_screen.dart';
+import 'package:ai_meal_analyzer/features/meal_planning_assistant/presentation/widgets/generated_meal_plans_viewer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,7 @@ class RoutePaths {
   static const String analysisResult = "/analysisResult";
   static const String analysisResultHistory = "/analysisResultHistory";
   static const String viewMealPlans = "/viewMealPlans";
+  static const String viewMealsPlansHistory = "/viewMealsPlansHistory";
 }
 
 final GoRouter router = GoRouter(
@@ -39,6 +41,20 @@ final GoRouter router = GoRouter(
         return Scaffold(
           appBar: AppBar(title: Text("Meal Analysis History")),
           body: MealAnalysisResultViewer(mealDetails: mealDetails),
+        );
+      },
+    ),
+    GoRoute(
+      path: RoutePaths.viewMealsPlansHistory,
+      builder: (context, state) {
+        final extras = state.extra as List;
+
+        return Scaffold(
+          appBar: AppBar(title: Text("Meal Plans History")),
+          body: GeneratedMealPlansViewerWidget(
+            meals: extras[0],
+            nutritions: extras[1],
+          ),
         );
       },
     ),

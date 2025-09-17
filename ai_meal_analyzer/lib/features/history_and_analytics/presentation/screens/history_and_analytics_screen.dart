@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class HistoryAndAnalyticsScreen extends StatefulWidget {
   const HistoryAndAnalyticsScreen({super.key});
@@ -18,9 +19,7 @@ class HistoryAndAnalyticsScreen extends StatefulWidget {
 class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
   @override
   void initState() {
-    context.read<HistoryAndAnalyticsBloc>().add(
-      FetchAllMealAnalysisDataEvent(),
-    );
+    context.read<HistoryAndAnalyticsBloc>().add(FetchMealsDataEvent());
     super.initState();
   }
 
@@ -90,11 +89,34 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: ListView.builder(
-                    itemCount: 20,
-                    padding: EdgeInsets.only(bottom: 10.w),
-                    itemBuilder: (context, index) => Text("Hello $index"),
-                  ),
+                  child:
+                      state.mealPlansData != null &&
+                          state.mealPlansData!.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: state.mealPlansData!.length,
+                          padding: EdgeInsets.only(bottom: 10.w),
+                          itemBuilder: (context, index) {
+                            final meal = state.mealPlansData![index];
+
+                            return Card(
+                              child: ListTile(
+                                title: Text(
+                                  "Meal Plan of ${formatDateTimeForMealPlanTitle(meal.creationDate!)}",
+                                ),
+                                onTap: () {
+                                  context.push(
+                                    RoutePaths.viewMealsPlansHistory,
+                                    extra: [
+                                      meal.mealPlans,
+                                      meal.totalDailyNutrition,
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        )
+                      : Center(child: Text("No Meal Plans History")),
                 ),
               ],
             );
@@ -102,5 +124,9 @@ class _HistoryAndAnalyticsScreenState extends State<HistoryAndAnalyticsScreen> {
         ),
       ),
     );
+  }
+
+  String formatDateTimeForMealPlanTitle(DateTime datetime) {
+    return DateFormat("EEE, dd MMM y, K:m a").format(datetime);
   }
 }

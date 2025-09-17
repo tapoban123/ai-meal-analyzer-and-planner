@@ -8,7 +8,7 @@ part of 'generated_meal_plan_model.dart';
 
 _MealPlanModel _$MealPlanModelFromJson(Map<String, dynamic> json) =>
     _MealPlanModel(
-      id: json['id'] as String?,
+      mealId: json['mealId'] as String?,
       type: json['type'] as String,
       name: json['name'] as String,
       ingredients: (json['ingredients'] as List<dynamic>)
@@ -22,7 +22,7 @@ _MealPlanModel _$MealPlanModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$MealPlanModelToJson(_MealPlanModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'mealId': instance.mealId,
       'type': instance.type,
       'name': instance.name,
       'ingredients': instance.ingredients,
@@ -33,6 +33,10 @@ Map<String, dynamic> _$MealPlanModelToJson(_MealPlanModel instance) =>
 _GeneratedMealPlanModel _$GeneratedMealPlanModelFromJson(
   Map<String, dynamic> json,
 ) => _GeneratedMealPlanModel(
+  id: json['id'] as String?,
+  creationDate: json['creationDate'] == null
+      ? null
+      : DateTime.parse(json['creationDate'] as String),
   mealPlans: (json['mealPlans'] as List<dynamic>)
       .map((e) => MealPlanModel.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -43,6 +47,8 @@ _GeneratedMealPlanModel _$GeneratedMealPlanModelFromJson(
 Map<String, dynamic> _$GeneratedMealPlanModelToJson(
   _GeneratedMealPlanModel instance,
 ) => <String, dynamic>{
+  'id': instance.id,
+  'creationDate': instance.creationDate?.toIso8601String(),
   'mealPlans': instance.mealPlans,
   'totalDailyNutrition': instance.totalDailyNutrition,
 };
